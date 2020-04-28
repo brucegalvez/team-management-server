@@ -1,40 +1,26 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask
+# Modulos propios
 from utils.environment import Environment
+from server import *
+from controller import *
 
-app = Flask(__name__)
+# Las siguientes funcionalidades
+# inicializan la experiencia del usuario
+home = api.namespace('home', description='Sign up & Login API')
+home.add_resource(UserCreator, '/signup')
+home.add_resource(LoginController, '/login')
 
-#Ruta para la API de login
-@app.route('/signup', methods=['POST'])
-def signup():
-    return 'Este es la ruta para crear un nuevo usuario'
+# Las siguientes funciones aplican dentro de tu perfil
+profile = api.namespace('me', description='Profile API')
+profile.add_resource(UserProfileData, '/profile')
+profile.add_resource(UserStatus, '/status')
 
-#Ruta para la API de validar la contraseña con Json Token
-@app.route('/login')
-def login():
-    return 'Este es la ruta para validar la contraseña'
-
-#Ruta para la API para editar perfil
-@app.route('/edit-profile', methods=['PUT'])
-def editProfile():
-    return 'Este es la ruta para editar los datos de tu perfil'
-
-#Ruta para la API para listar a los usuarios
-@app.route('/list-users')
-def listUsers():
-    return 'Este es la ruta para mostrar usuarios'
-
-#Ruta para la API
-@app.route('/see-user')
-def seeUser():
-    return 'Este es la ruta a para ver los datos de un usuario'
-
-@app.route('/change-status', methods=['PUT'])
-def changeStatus():
-    return 'Aquí podrás cambiar tu estado de conexión'
-
+# Las siguientes funcionan se accionan desde un dashboard
+dashboard = api.namespace('dashboard', description='Dashboard API')
+dashboard.add_resource(UsersDashboard, '/friends')
+dashboard.add_resource(UserInfo, '/friends/<int:id>')
 
 if __name__ == '__main__':
     config = Environment().settingsGeneral()

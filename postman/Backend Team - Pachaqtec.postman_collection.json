@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "Sign up",
+			"name": "Home",
 			"item": [
 				{
 					"name": "Initial Sign up",
@@ -15,37 +15,35 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/signup",
+							"raw": "{{BASE_URL}}/home/signup",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
+								"home",
 								"signup"
 							]
-						}
+						},
+						"description": "Aquí crearás tu usuario"
 					},
 					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Login",
-			"item": [
+				},
 				{
 					"name": "Initial login",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/login",
+							"raw": "{{BASE_URL}}/home/login",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
+								"home",
 								"login"
 							]
-						}
+						},
+						"description": "Aquí validarás tu contraseña"
 					},
 					"response": []
 				}
@@ -53,76 +51,7 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Edit Profile",
-			"item": [
-				{
-					"name": "Initial Edit Profile",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/edit-profile",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"edit-profile"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "List Users",
-			"item": [
-				{
-					"name": "Initial List Users",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/edit-profile",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"edit-profile"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "See user",
-			"item": [
-				{
-					"name": "Initial See User",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/edit-profile",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"edit-profile"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Change Status",
+			"name": "Profile",
 			"item": [
 				{
 					"name": "Initial Change Status",
@@ -130,12 +59,76 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/change-status",
+							"raw": "{{BASE_URL}}/me/status",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"change-status"
+								"me",
+								"status"
+							]
+						},
+						"description": "Aqui podras cambiar el estado de conexion de tu perfil"
+					},
+					"response": []
+				},
+				{
+					"name": "Initial Edit Profile",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/me/profile",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"me",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Dashboard",
+			"item": [
+				{
+					"name": "Initial List Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/dashboard/friends",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"dashboard",
+								"friends"
+							]
+						},
+						"description": "Aquí se devolverá los datos de los usuarios"
+					},
+					"response": []
+				},
+				{
+					"name": "Initial See User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/dashboard/friends/1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"dashboard",
+								"friends",
+								"1"
 							]
 						}
 					},
