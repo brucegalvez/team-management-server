@@ -1,3 +1,4 @@
+# Distribution / packaging
 .Python
 [Bb]in
 [Ii]nclude
@@ -9,3 +10,6 @@ pyvenv.cfg
 .venv
 pip-selfcheck.json
 .env
+
+# Byte-compiled / optimized / DLL files
+!**/__pycache__/

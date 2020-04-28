@@ -1,6 +1,8 @@
 # Backend-Team-Management-App
-Backend de app para administración y comunicación de equipo de alumnos de Pachaqtec Escuela de Coding, realizado como parte del proyecto final del Programa de Especialización en Backend 2019-2020.
+Backend de app para administración y comunicación de equipo de alumnos de Pachaqtec Escuela de Coding, realizado como parte del proyecto final del mismo.
 
-## Créditos:
-- Rodrigo Bruce Galvez
-- Javier Cárdenas
+Creditos:
+
+- Rodrigo Bruce Galvez (líder)
+
+- Javier Cárdenas Silva
