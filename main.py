@@ -22,12 +22,6 @@ dashboard = api.namespace('dashboard', description='Dashboard API')
 dashboard.add_resource(UsersDashboard, '/friends')
 dashboard.add_resource(UserInfo, '/friends/<int:id>')
 
-from flask import Flask
-from utils.environment import Environment
-
-app = Flask(__name__)
-
-
 if __name__ == '__main__':
     config = Environment().settingsGeneral()
     app.run(port=config['PORT'], debug=config['DEBUG'])

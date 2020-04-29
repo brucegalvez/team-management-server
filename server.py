@@ -1,4 +1,4 @@
- #!/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # Librerias importadas
@@ -12,5 +12,5 @@ api = Api(
     app,
     title='Pachaqtec Intranet',
     version='1.0',
-    description= 'Backend de app para administración.'
+    description='Backend de app para administración.'
 )
