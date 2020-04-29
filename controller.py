@@ -25,23 +25,23 @@ class LoginController(Resource):
 class UserStatus(Resource):
     # Ruta para cambiar tu estado de conexion
     def put(self):
-        return 'Tu nuevo estado de conexion es: '
+        return 'Tu nuevo estado de conexion es: ', 204
 
 
 class UserProfileData(Resource):
     # Ruta para la API para editar perfil
     def put(self):
-        return 'Cambio de informacion exitoso'
+        return 'Cambio de informacion exitoso', 204
 
 
 class UsersDashboard(Resource):
 
     # Ruta para la API para listar a los usuarios
     def get(self):
-        return 'Estos son todos los usuarios'
+        return 'Estos son todos los usuarios', 200
 
 
 class UserInfo(Resource):
     # Ruta para obtener los datos de un solo usuario
     def get(self, id):
-        return f'Este es la ruta a para ver los datos del usuario {id}'
+        return f'Este es la ruta a para ver los datos del usuario {id}', 200
