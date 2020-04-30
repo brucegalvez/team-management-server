@@ -5,3 +5,6 @@ Backend de app para administración y comunicación de equipo de alumnos de Pach
 - Rodrigo Bruce Galvez (líder)
 - Javier Cárdenas
 
+# Estándar de trabajo
+- El presente proyecto sigue los lineamientos del PEP8.
+- Para acceder a la documentación de uso referirse al archivo postman.

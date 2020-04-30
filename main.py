@@ -4,7 +4,10 @@
 # Modulos propios
 from utils.environment import Environment
 from server import *
-from controller import *
+from controllers.homeController import UserCreator, LoginController
+from controllers.dashboardController import UsersDashboard, UserInfo
+from controllers.profileController import UserStatus, UserProfileData
+
 
 # Las siguientes funcionalidades
 # inicializan la experiencia del usuario
