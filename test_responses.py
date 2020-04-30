@@ -3,6 +3,7 @@
 
 # Librerias importadas
 import unittest
+import requests
 import json
 
 # Modulos propios
@@ -35,13 +36,19 @@ class SingupTest(unittest.TestCase):
         self.assertEqual(204, response.status_code)
 
     def test_UserStatus(self):
-        response = self.app.put(STATUS_URL)
-        self.assertEqual(204, response.status_code)
+        payload = json.dumps({
+            "estado de conexion": "Conectado"
+        })
+        response = requests.put(STATUS_URL, headers={
+                                "Content-Type": "application/json"}, data=payload)
+        data = response.json()
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("true", data["success"])
 
-    def test_UserStatus(self):
+    def test_UserDashboard(self):
         response = self.app.get(FRIENDS_URL)
         self.assertEqual(200, response.status_code)
 
-    def test_UserStatus(self):
+    def test_UserInfo(self):
         response = self.app.get(FRIEND_URL)
         self.assertEqual(200, response.status_code)
