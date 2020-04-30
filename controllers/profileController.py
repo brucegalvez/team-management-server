@@ -14,19 +14,19 @@ from flask import jsonify, request
 class UserStatus(Resource):
     # Ruta para cambiar tu estado de conexion
     def put(self):
-        
+
         # Declaramos la lista de valores posibles
         estados = ['Conectado', 'Ocupado', 'Ausente',
                    'No Disponible', 'Desconectado']
-        
+
         # Capturamos la respuesta en una variable
         data = request.get_json()
         nuevo_estado = data["estado de conexion"]
-        
+
         # Validamos que el estado esté en la lista
         if nuevo_estado in estados:
             return {
-                'message': f'Tu nuevo estado de conexion es: {nuevo_estado}',
+                'message': f'Tu nuevo estado de conexión es: {nuevo_estado}',
                 'connection': f'Ultima conexion: {last_conection}',
                 "success": "true"}, 200
         else:
