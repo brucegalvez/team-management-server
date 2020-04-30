@@ -4,7 +4,8 @@
 # Módulos propios
 from server import *
 from logger import *
-from lastConection import *
+from utils.lastConnection import *
+from utils.environment import Environment
 
 # Librerias importadas
 from flask_restx import Resource
@@ -14,17 +15,16 @@ from flask import jsonify, request
 class UserStatus(Resource):
     # Ruta para cambiar tu estado de conexion
     def put(self):
-
+        config = Environment().settingsOptions()
         # Declaramos la lista de valores posibles
-        estados = ['Conectado', 'Ocupado', 'Ausente',
-                   'No Disponible', 'Desconectado']
+        status_list = config['STATUS_OPTIONS']
 
         # Capturamos la respuesta en una variable
         data = request.get_json()
         new_status = data["status"]
 
         # Validamos que el estado esté en la lista
-        if new_status in estados:
+        if new_status in status_list:
             if new_status == 'Conectado':
                 return {
                     'status': new_status,
@@ -32,7 +32,7 @@ class UserStatus(Resource):
             else:
                 return {
                     'status': new_status,
-                    'connection': f'Ultima conexion: {last_conection}',
+                    'connection': f'Última conexión: {last_conection}',
                     "success": "true"}, 200
         else:
             return {
