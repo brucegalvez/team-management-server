@@ -12,6 +12,8 @@ pip-selfcheck.json
 
 .env
 
+.vscode/*
+
 develop.log
 client.rest
 
