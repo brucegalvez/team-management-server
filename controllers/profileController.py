@@ -21,14 +21,19 @@ class UserStatus(Resource):
 
         # Capturamos la respuesta en una variable
         data = request.get_json()
-        nuevo_estado = data["estado de conexion"]
+        new_status = data["status"]
 
         # Validamos que el estado esté en la lista
-        if nuevo_estado in estados:
-            return {
-                'message': f'Tu nuevo estado de conexión es: {nuevo_estado}',
-                'connection': f'Ultima conexion: {last_conection}',
-                "success": "true"}, 200
+        if new_status in estados:
+            if new_status == 'Conectado':
+                return {
+                    'status': new_status,
+                    "success": "true"}, 200
+            else:
+                return {
+                    'status': new_status,
+                    'connection': f'Ultima conexion: {last_conection}',
+                    "success": "true"}, 200
         else:
             return {
                 'message': 'Elija una opción correcta',

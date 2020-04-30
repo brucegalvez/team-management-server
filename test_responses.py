@@ -39,8 +39,10 @@ class SingupTest(unittest.TestCase):
         payload = json.dumps({
             "estado de conexion": "Conectado"
         })
-        response = requests.put(STATUS_URL, headers={
-                                "Content-Type": "application/json"}, data=payload)
+        response = requests.put(STATUS_URL,
+                                headers={
+                                    "Content-Type": "application/json"},
+                                data=payload)
         data = response.json()
         self.assertEqual(200, response.status_code)
         self.assertEqual("true", data["success"])
