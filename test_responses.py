@@ -3,6 +3,7 @@
 
 # Librerias importadas
 import unittest
+import json
 
 # Modulos propios
 from main import app
