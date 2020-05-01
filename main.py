@@ -19,7 +19,7 @@ home.add_resource(LoginController, '/login')
 # Las siguientes funciones aplican dentro de tu perfil
 profile = api.namespace('me', description='Profile API')
 profile.add_resource(UserProfileData, '/profile')
-profile.add_resource(UserStatus, '/status')
+profile.add_resource(UserStatus, '/<username>/status')
 
 # Las siguientes funcionan se accionan desde un dashboard
 dashboard = api.namespace('dashboard', description='Dashboard API')
