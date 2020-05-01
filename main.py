@@ -28,5 +28,4 @@ dashboard.add_resource(UserInfo, '/friends/<int:id>')
 
 if __name__ == '__main__':
     config = Environment().settingsGeneral()
-    logging.info("Iniciando servidor")
     app.run(port=config['PORT'], debug=config['DEBUG'])

@@ -5,6 +5,7 @@ cffi==1.14.0
 click==7.1.2
 Flask==1.1.2
 Flask-Bcrypt==0.7.1
+Flask-JWT-Extended==3.24.1
 flask-restx==0.2.0
 humanfriendly==8.2
 itsdangerous==1.1.0
