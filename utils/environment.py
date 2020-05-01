@@ -24,3 +24,9 @@ class Environment():
 
     def settingsOptions(self):
         return {'STATUS_OPTIONS': list((os.getenv("STATUS_OPTIONS")).split('-'))}
+
+    def settingsJWT(self):
+        return {
+            'JWT_SECRET_KEY': os.getenv("JWT_SECRET_KEY"),
+            'JWT_ALGORITHM': os.getenv("JWT_ALGORITHM"),
+        }
