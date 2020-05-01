@@ -37,10 +37,22 @@ class UserStatus(Resource):
         else:
             return {
                 'message': 'Elija una opción correcta',
-                'success': 'false'}, 200
+                'success': 'false'}, 400
 
 
 class UserProfileData(Resource):
     # Ruta para la API para editar perfil
     def put(self):
-        return 'Cambio de informacion exitoso', 204
+        # Capturamos el nuevo perfil en una variable
+        data = request.get_json()
+        new_profile = data["profile"]
+
+        # Validamos que el estado esté en la lista
+        if new_profile is not None and type(new_profile) == str:
+            return {
+                'profile': new_profile,
+                "success": "true"}, 200
+        else:
+            return {
+                'message': 'Ingrese términos válidos',
+                'success': 'false'}, 400
