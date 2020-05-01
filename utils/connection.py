@@ -18,5 +18,5 @@ class Connection():
     # Este recibe el usuario a actualizar como user
     # y el valor a cambiar como newValue
     def updateUserData(self, user, newValue):
-        return self.database.users.update_one(user, newValue)
-        logging.info(x.modified_count, "Dato actualizado")
+        x = self.database.users.update_one(user, newValue)
+        logging.info(x.modified_count, 'Actualizado')
