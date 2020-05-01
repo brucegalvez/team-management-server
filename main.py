@@ -4,6 +4,7 @@
 # Modulos propios
 from utils.environment import Environment
 from server import *
+from logger import *
 from controllers.homeController import UserCreator, LoginController
 from controllers.dashboardController import UsersDashboard, UserInfo
 from controllers.profileController import UserStatus, UserProfileData
@@ -27,4 +28,5 @@ dashboard.add_resource(UserInfo, '/friends/<int:id>')
 
 if __name__ == '__main__':
     config = Environment().settingsGeneral()
+    logging.info("Iniciando servidor")
     app.run(port=config['PORT'], debug=config['DEBUG'])

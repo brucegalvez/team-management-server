@@ -19,5 +19,8 @@ class Environment():
         return{
             'DB_HOST': os.getenv("DB_HOST", '127.0.0.1'),
             'DB_PORT': int(os.getenv("DB_PORT", 3306)),
-            'DB_DATABASE': os.getenv("DB_DATABASE", 'intranet'),
+            'DB_DATABASE': os.getenv("DB_DATABASE", 'intranet')
         }
+
+    def settingsOptions(self):
+        return {'STATUS_OPTIONS': list((os.getenv("STATUS_OPTIONS")).split('-'))}
