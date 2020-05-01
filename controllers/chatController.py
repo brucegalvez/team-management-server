@@ -33,10 +33,16 @@ class UserStatus(Resource):
             # Si es otro tipo, respondera con la hora
             # de la ultima conexion
             else:
+                # Actualizamos status
+                connection.database.users.update_one(current_user, newValue)
+                # Creamos nuevo query de ultima vez conectado
+                lastConnection = {"lastConnection": f'{last_connection}'}
+                newValue = {"$set": lastConnection}
+                # Actualizamos lastConnection
                 connection.database.users.update_one(current_user, newValue)
                 return {
                     'status': new_status,
-                    'connection': f'Última conexión: {last_conection}',
+                    'connection': f'Última conexión: {last_connection}',
                     "success": "true"}, 200
         else:
             return {
