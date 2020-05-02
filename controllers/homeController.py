@@ -35,7 +35,7 @@ class LoginController(Resource):
             if check_password_hash(foundUser["password"], user['password']):
                 expires = datetime.timedelta(days=7)
                 access_token = create_access_token(
-                    identity=str(1), expires_delta=expires)
+                    identity=foundUser['username'], expires_delta=expires)
                 print(foundUser)
                 return {
                     'username': foundUser['username'],
