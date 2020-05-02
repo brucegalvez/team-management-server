@@ -12,6 +12,7 @@ class UserProfileData(Resource):
 
         # Capturamos la peticion
         data = request.get_json()
+        print(data)
 
         # Convertimos a string el contenido recibido
         updatedFields = dicttostr.dictToStr(data)

@@ -10,17 +10,22 @@ class UserCreator(Resource):
         user = request.get_json()
         requiredFields = ['firstName', 'lastName',
                           'username', 'email', 'password', 'status']
-        if all(fields in requiredFields for fields in user):
-            user['password'] = generate_password_hash(
-                user['password']).decode('utf8')
-            connection.database.users.insert_one(user)
-            return {
-                'message': 'Bienvenido a Pachaqtec. Cuenta creada con éxito.',
-                'success': 'true'}, 200
-        else:
+        if not all(fields in requiredFields for fields in user):
             return {
                 'message': 'Error en los campos enviados.',
                 'success': 'false'}, 200
+        else:
+            if connection.database.users.find_one({'email': user['email']}):
+                return {
+                    'message': 'Un usuario con el mismo email ya existe.',
+                    'success': 'false'}, 200
+            else:
+                user['password'] = generate_password_hash(
+                    user['password']).decode('utf8')
+                connection.database.users.insert_one(user)
+                return {
+                    'message': 'Bienvenido a Pachaqtec. Cuenta creada con éxito.',
+                    'success': 'true'}, 200
 
 
 class LoginController(Resource):
@@ -29,10 +34,18 @@ class LoginController(Resource):
     def post(self):
         user = request.get_json()
         requiredFields = ['email', 'password']
-        if all(fields in requiredFields for fields in user):
+        if not all(fields in requiredFields for fields in user):
+            return {
+                'message': 'Email o contraseña incorrectas',
+                'success': 'false'}, 200
+        else:
             foundUser = connection.database.users.find_one(
                 {'email': user['email']})
-            if check_password_hash(foundUser["password"], user['password']):
+            if not check_password_hash(foundUser["password"], user['password']):
+                return {
+                    'message': 'Email o contraseña incorrectas',
+                    'success': 'false'}, 200
+            else:
                 expires = datetime.timedelta(days=7)
                 access_token = create_access_token(
                     identity=foundUser['username'], expires_delta=expires)
@@ -40,11 +53,3 @@ class LoginController(Resource):
                     'username': foundUser['username'],
                     'token': access_token
                 }, 200
-            else:
-                return {
-                    'message': 'Email o contraseña incorrectas',
-                    'success': 'false'}, 200
-        else:
-            return {
-                'message': 'Email o contraseña incorrectas',
-                'success': 'false'}, 200
