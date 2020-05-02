@@ -35,17 +35,16 @@ class LoginController(Resource):
             if check_password_hash(foundUser["password"], user['password']):
                 expires = datetime.timedelta(days=7)
                 access_token = create_access_token(
-                    identity=str(1), expires_delta=expires)
-                print(foundUser)
+                    identity=foundUser['username'], expires_delta=expires)
                 return {
                     'username': foundUser['username'],
                     'token': access_token
                 }, 200
             else:
                 return {
-                    'message': 'Email o contrasena incorrectas',
+                    'message': 'Email o contraseña incorrectas',
                     'success': 'false'}, 200
         else:
             return {
-                'message': 'Email o contrasena incorrectas',
+                'message': 'Email o contraseña incorrectas',
                 'success': 'false'}, 200
