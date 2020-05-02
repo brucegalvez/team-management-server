@@ -21,7 +21,7 @@ class Validate():
     # El correo que ingresa por parametro debe coincidir
     # con la siguiente regla de regex
     def validateEmail(self, email):
-        rule = re.compile('[a-zA-z0-9.-_]+@[a-zA-Z-]+\.[a-z]')
+        rule = re.compile('[a-zA-z0-9_.+-]+@[a-zA-Z-]+\.[a-z]')
 
         if re.match(rule, email):
             logging.info(f"Correo validado: {email}")
