@@ -5,57 +5,62 @@
 from . import *
 
 
-class UserStatus(Resource):
-    # Ruta para cambiar tu estado de conexion
+class UserProfileData(Resource):
+
+    # Ruta para la API para editar perfil
     def put(self, username):
-        config = Environment().settingsOptions()
-        # Declaramos la lista de valores posibles
-        status_list = config['STATUS_OPTIONS']
 
         # Capturamos la peticion
         data = request.get_json()
-        # Capturamos el nuevo status
-        new_status = data["status"]
-        # Creamos el query para el nuevo status
-        newValue = {"$set": data}
-        # Obtenemos el usuario a modificar
-        current_user = connection.mostrarRegistro(username)
 
-        # Validamos que la opcion este dentro de lo permitido
-        if new_status in status_list:
-            # Si el status es conectado, se actualiza,
-            # pero sin responder ultima conexion
-            if new_status == 'Conectado':
-                connection.database.users.update_one(current_user, newValue)
+        # Convertimos a string el contenido recibido
+        updatedFields = dicttostr.dictToStr(data)
+
+        # Capturamos cada key
+        new_profile = data.get("profile", "")
+        new_program = data.get("program", "")
+        new_phone = data.get("phone", "")
+        new_email = data.get("email", "")
+        new_campus = data.get("campus", "")
+        new_profilePic = data.get("profile picture", "")
+
+        # Validamos contenido con opciones válidas
+        validFields = config['USER_DATA_OPTIONS']
+        if any(fields in validFields for fields in data):
+            try:
+                if new_phone in data.values():
+                    if validate.validateMobile(new_phone) == True:
+                        pass
+                    else:
+                        return {
+                            'message': 'Ingrese un número correcto',
+                            'success': 'false'}, 400
+
+                if new_email in data.values():
+                    if validate.validateEmail(new_email) == True:
+                        pass
+                    else:
+                        return {
+                            'message': 'Ingrese un correo válido',
+                            'success': 'false'}, 400
+            except:
+                logging.error('Número y correo inválidos')
                 return {
-                    'status': new_status,
-                    "success": "true"}, 200
-            # Si es otro tipo, respondera con la hora
-            # de la ultima conexion
+                    'message': 'Datos inválidos',
+                    'success': 'false'}, 400
             else:
-                connection.database.users.update_one(current_user, newValue)
+                # Creamos el query para el nuevo status
+                newValue = {"$set": data}
+                # Obtenemos el usuario a modificar
+                current_user = connection.showItem(username)
+                # Actualizamos la data del usuario
+                connection.updateItem(current_user, newValue)
+
                 return {
-                    'status': new_status,
-                    'connection': f'Última conexión: {last_conection}',
+                    'message': f"Datos actualizados: {updatedFields}",
                     "success": "true"}, 200
-        else:
-            return {
-                'message': 'Elija una opción correcta',
-                'success': 'false'}, 400
 
-
-class UserProfileData(Resource):
-    # Ruta para la API para editar perfil
-    def put(self):
-        # Capturamos el nuevo perfil en una variable
-        data = request.get_json()
-        new_profile = data["profile"]
-
-        # Validamos que el estado esté en la lista
-        if new_profile is not None and type(new_profile) == str:
-            return {
-                'profile': new_profile,
-                "success": "true"}, 200
+        # Si los datos no son correctos enviará mensaje
         else:
             return {
                 'message': 'Ingrese términos válidos',
