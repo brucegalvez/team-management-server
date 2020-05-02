@@ -23,7 +23,8 @@ class Environment():
         }
 
     def settingsOptions(self):
-        return {'STATUS_OPTIONS': list((os.getenv("STATUS_OPTIONS")).split('-'))}
+        return {'STATUS_OPTIONS': list((os.getenv("STATUS_OPTIONS")).split('-')),
+                'USER_DATA_OPTIONS': list((os.getenv("USER_DATA_OPTIONS")).split('-'))}
 
     def settingsJWT(self):
         return {
