@@ -16,7 +16,7 @@ import datetime
 from flask import request, jsonify
 from flask_restx import Resource
 from flask_bcrypt import generate_password_hash, check_password_hash
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
 connection = Connection()
 config = Environment().settingsOptions()
