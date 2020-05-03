@@ -12,10 +12,10 @@ class Validate():
         rule = re.compile('[+]519\d{8}$')
 
         if re.match(rule, phone):
-            logging.info(f"Número validado: {phone}")
+            logging.debug(f"Número validado: {phone}")
             return True
         else:
-            logging.error(f'{phone} no es un número correcto')
+            logging.debug(f'{phone} no es un número correcto')
             return False
 
     # El correo que ingresa por parametro debe coincidir
@@ -24,8 +24,20 @@ class Validate():
         rule = re.compile('[a-zA-z0-9_.+-]+@[a-zA-Z-]+\.[a-z]')
 
         if re.match(rule, email):
-            logging.info(f"Correo validado: {email}")
+            logging.debug(f"Correo validado: {email}")
             return True
         else:
-            logging.error(f'{email} no es un email correcto')
+            logging.debug(f'{email} no es un email correcto')
             return False
+
+    def validatePassword(self, password):
+        rule = re.compile('[A-Za-z0-9@#$%^&+=]{8,}')
+        return re.match(rule, password)
+
+    def validateGivenName(self, givenName):
+        rule = re.compile('[A-Za-z]{,45}')
+        return re.match(rule, givenName)
+
+    def validateUsername(self, username):
+        rule = re.compile('[A-Za-z0-9]{,30}')
+        return re.match(rule, username)
