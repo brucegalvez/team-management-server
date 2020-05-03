@@ -8,10 +8,10 @@ class Connection():
         client = MongoClient(config['DB_HOST'], config['DB_PORT'])
         self.database = client[config['DB_DATABASE']]
 
-    # Metodo para obtener un registro segun username
-    def showItem(self, username):
+    # Metodo para obtener un registro
+    def showItem(self, key, value):
         return self.database.users.find_one(
-            {"username": f'{username}'})
+            {key: value})
 
     # Metodo para actualizar un (1) registro.
     # Este recibe el usuario a actualizar como user

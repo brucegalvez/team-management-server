@@ -16,7 +16,6 @@ class UserProfileData(Resource):
 
         # Capturamos la peticion
         data = request.get_json()
-        print(data)
 
         # Convertimos a string el contenido recibido
         updatedFields = dicttostr.dictToStr(data)
@@ -30,31 +29,44 @@ class UserProfileData(Resource):
         new_profilePic = data.get("profile picture", "")
 
         # Validamos contenido con opciones válidas
-        validFields = config['USER_DATA_OPTIONS']
+        validFields = ["profile", "program", "phone",
+                       "email", "campus", "profile picture", "tags"]
 
         # Validamos que identidad coincida con usuario
         # a modificar data.
-        if logged_user == username:
+
+        if logged_user != username:
+            return {
+                'message': 'No es el usuario',
+                'success': 'false'
+            }, 400
+
+        else:
             # Validamos que quiera cambiar datos permitidos
-            if any(fields in validFields for fields in data):
+            if not any(fields in validFields for fields in data):
+                # Si los datos no son correctos enviará mensaje
+                return {
+                    'message': 'Ingrese términos válidos',
+                    'success': 'false'}, 400
+            else:
                 try:
                     # Validamos si el telefono es real
                     if new_phone in data.values():
-                        if validate.validateMobile(new_phone) == True:
-                            pass
-                        else:
+                        if not validate.validateMobile(new_phone):
                             return {
                                 'message': 'Ingrese un número correcto',
                                 'success': 'false'}, 400
+                        else:
+                            pass
 
                     # Validamos si el correo es valido
                     if new_email in data.values():
-                        if validate.validateEmail(new_email) == True:
-                            pass
-                        else:
+                        if not validate.validateEmail(new_email):
                             return {
                                 'message': 'Ingrese un correo válido',
                                 'success': 'false'}, 400
+                        else:
+                            pass
                 except:
                     logging.error('Número y correo inválidos')
                     return {
@@ -64,21 +76,10 @@ class UserProfileData(Resource):
                     # Creamos el query para el nuevo status
                     newValue = {"$set": data}
                     # Obtenemos el usuario a modificar
-                    current_user = connection.showItem(username)
+                    current_user = connection.showItem("username", username)
                     # Actualizamos la data del usuario
                     connection.updateItem(current_user, newValue)
 
                     return {
                         'message': f"Datos actualizados: {updatedFields}",
                         "success": "true"}, 200
-
-            # Si los datos no son correctos enviará mensaje
-            else:
-                return {
-                    'message': 'Ingrese términos válidos',
-                    'success': 'false'}, 400
-        else:
-            return {
-                'message': 'No es el usuario',
-                'success': 'false'
-            }, 400
