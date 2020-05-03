@@ -33,6 +33,7 @@ class UserCreator(Resource):
             user['password'] = generate_password_hash(
                 user['password']).decode('utf8')
             user['status'] = 'Conectado'
+            user['lastConnected'] = 'Ahora'
             mongo.db.users.insert_one(user)
             return {
                 'message': 'Cuenta creada con éxito.',
