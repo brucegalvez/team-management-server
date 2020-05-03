@@ -5,6 +5,7 @@
 import unittest
 import requests
 import json
+from random import randint
 
 # Modulos propios
 from main import app
