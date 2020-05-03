@@ -39,72 +39,62 @@ class UserProfileData(Resource):
         validPrograms = ['BackEnd', 'FrontEnd',
                          'Desarrollo de Apps Móviles', 'Diseño de Experiencia del Usuario']
 
-        # Validamos que identidad coincida con usuario
-        # a modificar data.
-
-        if logged_user != username:
+        # Validamos que quiera cambiar datos permitidos
+        if not any(fields in validFields for fields in data):
+            # Si los datos no son correctos enviará mensaje
             return {
-                'message': 'No es el usuario',
-                'success': 'false'
-            }, 400
-
+                'message': 'Ingrese términos válidos',
+                'success': 'false'}, 400
         else:
-            # Validamos que quiera cambiar datos permitidos
-            if not any(fields in validFields for fields in data):
-                # Si los datos no son correctos enviará mensaje
+            try:
+                # Validamos si el telefono es real
+                if new_phone in data.values():
+                    if not validate.validateMobile(new_phone):
+                        return {
+                            'message': 'Ingrese un número correcto',
+                            'success': 'false'}, 400
+                    else:
+                        pass
+
+                # Validamos si el correo es valido
+                if new_email in data.values():
+                    if not validate.validateEmail(new_email):
+                        return {
+                            'message': 'Ingrese un correo válido',
+                            'success': 'false'}, 400
+                    else:
+                        pass
+
+                # Validamos si la nueva sede existe
+                if new_campus in data.values():
+                    if not new_campus in validCampus:
+                        return {
+                            'message': 'No es una sede existente',
+                            'success': 'false'}, 400
+                    else:
+                        pass
+                # Validamos si el nuevo prograama existe
+                if new_program in data.values():
+                    if not new_program in validPrograms:
+                        return {
+                            'message': 'No es un programa válido',
+                            'success': 'false'
+                        }, 400
+                    else:
+                        pass
+            except:
+                logging.error('Número y correo inválidos')
                 return {
-                    'message': 'Ingrese términos válidos',
+                    'message': 'Datos inválidos',
                     'success': 'false'}, 400
             else:
-                try:
-                    # Validamos si el telefono es real
-                    if new_phone in data.values():
-                        if not validate.validateMobile(new_phone):
-                            return {
-                                'message': 'Ingrese un número correcto',
-                                'success': 'false'}, 400
-                        else:
-                            pass
+                # Creamos el query para el nuevo status
+                newValue = {"$set": data}
+                # Obtenemos el usuario a modificar
+                current_user = connection.showItem("username", username)
+                # Actualizamos la data del usuario
+                connection.updateItem(current_user, newValue)
 
-                    # Validamos si el correo es valido
-                    if new_email in data.values():
-                        if not validate.validateEmail(new_email):
-                            return {
-                                'message': 'Ingrese un correo válido',
-                                'success': 'false'}, 400
-                        else:
-                            pass
-
-                    # Validamos si la nueva sede existe
-                    if new_campus in data.values():
-                        if not new_campus in validCampus:
-                            return {
-                                'message': 'No es una sede existente',
-                                'success': 'false'}, 400
-                        else:
-                            pass
-                    # Validamos si el nuevo prograama existe
-                    if new_program in data.values():
-                        if not new_program in validPrograms:
-                            return {
-                                'message': 'No es un programa válido',
-                                'success': 'false'
-                            }, 400
-                        else:
-                            pass
-                except:
-                    logging.error('Número y correo inválidos')
-                    return {
-                        'message': 'Datos inválidos',
-                        'success': 'false'}, 400
-                else:
-                    # Creamos el query para el nuevo status
-                    newValue = {"$set": data}
-                    # Obtenemos el usuario a modificar
-                    current_user = connection.showItem("username", username)
-                    # Actualizamos la data del usuario
-                    connection.updateItem(current_user, newValue)
-
-                    return {
-                        'message': f"Datos actualizados: {updatedFields}",
-                        "success": "true"}, 200
+                return {
+                    'message': f"Datos actualizados: {updatedFields}",
+                    "success": "true"}, 200
