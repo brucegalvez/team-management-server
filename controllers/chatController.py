@@ -7,45 +7,135 @@ from . import *
 
 class UserStatus(Resource):
     # Ruta para cambiar tu estado de conexion
+    @jwt_required
     def put(self, username):
+
+        # Obtenemos la identidad de quien hace la peticion
+        logged_user = get_jwt_identity()
+
         # Declaramos la lista de valores posibles
-        status_list = config['STATUS_OPTIONS']
+        status_list = ["Conectado", "Ocupado",
+                       "Ausente", "No Disponible", "Desconectado"]
 
         # Capturamos la peticion
         data = request.get_json()
         # Capturamos el nuevo status
         new_status = data["status"]
-        # Creamos el query para el nuevo status
-        newValue = {"$set": data}
         # Obtenemos el usuario a modificar
-        current_user = connection.showItem(username)
+        current_user = connection.showItem("username", username)
 
-        # Validamos que la opcion este dentro de lo permitido
-        if new_status in status_list:
-            # Si el status es conectado, se actualiza,
-            # pero sin responder ultima conexion
-            if new_status == 'Conectado':
-                connection.updateItem(current_user, newValue)
-                return {
-                    'status': new_status,
-                    "success": "true"}, 200
-            # Si es otro tipo, respondera con la hora
-            # de la ultima conexion
-            else:
-                # Actualizamos status
-                connection.updateItem(current_user, newValue)
-
-                # Creamos nuevo query de ultima vez conectado
-                lastConnection = {"lastConnection": f'{last_connection}'}
-                newValue = {"$set": lastConnection}
-
-                # Actualizamos lastConnection
-                connection.updateItem(current_user, newValue)
-                return {
-                    'status': new_status,
-                    'connection': f'Última conexión: {last_connection}',
-                    "success": "true"}, 200
-        else:
+        # Validamos que identidad coincida con usuario
+        # a modificar data.
+        if logged_user != current_user['username']:
             return {
-                'message': 'Elija una opción correcta',
-                'success': 'false'}, 400
+                'message': 'No es el usuario',
+                'success': 'false'
+            }, 400
+
+        else:
+            # Validamos que la opcion este dentro de lo permitido
+            if not new_status in status_list:
+                return {
+                    'message': 'Elija una opción correcta',
+                    'success': 'false'}, 400
+
+            # Procede la solicitud
+            else:
+                if current_user['status'] != 'Conectado':
+                    # De Otro a Otro
+                    if new_status != 'Conectado':
+                        # Si el status a actualizar no era Conectado,
+                        # Obtenemos ultima conexion de usuario
+                        lastConnection = current_user['lastConnection']
+                        newQuery = {"$set": {
+                            "lastConnection": lastConnection,
+                            "status": new_status}}
+
+                        # Actualizamos lastConnection
+                        connection.updateItem(
+                            current_user, newQuery)
+
+                        return {
+                            'status': new_status,
+                            'Última conexión': f'Última conexión: {lastConnection}',
+                            "success": "true"}, 200
+
+                    # De Desconectado a Conectado
+                    else:
+                        newQuery = {"$set": {
+                            "lastConnection": "Ahora",
+                            "status": new_status}}
+
+                        # Actualizamos lastConnection
+                        connection.updateItem(
+                            current_user, newQuery)
+
+                        return {
+                            'status': new_status,
+                            'Última conexión': 'Ahora',
+                            "success": "true"
+                        }, 200
+
+                else:
+                    # De Otro a Desconectado"
+                    if new_status != 'Conectado':
+                        # Creamos query
+                        lastTime = getTime.getTime()
+                        newQuery = {"$set": {
+                            "lastConnection": lastTime,
+                            "status": new_status}}
+
+                        # Actualizamos status y lastConnection
+                        connection.updateItem(
+                            current_user, newQuery)
+
+                        return {
+                            'status': new_status,
+                            'Última conexión': f'Última conexión: {lastTime}',
+                            "success": "true"}, 200
+                    # De Conectado a Conectado
+                    else:
+                        # Creamos query
+                        newQuery = {"$set": {
+                            "lastConnection": "Ahora",
+                            "status": new_status}}
+
+                        # Actualizamos status y lastConnection
+                        connection.updateItem(
+                            current_user, newQuery)
+
+                        return {
+                            'status': new_status,
+                            'Última conexión': 'Ahora',
+                            "success": "true"
+                        }, 200
+
+
+class ChatDisplay(Resource):
+    # Ruta para la API para listar a los usuarios conectados y desconectados
+
+    @jwt_required
+    def get(self):
+        connected = []
+        disconnected = []
+
+        # Obtenemos la lista de conectados
+        for user in connection.showList("status", "Conectado"):
+            username = user['username']
+            firstName = user['firstName']
+            lastName = user['lastName']
+            lastConnection = user['lastConnection']
+            connected.append(
+                f"{firstName} {lastName} ({username}) Conectado: {lastConnection}")
+
+        # Obtenemos la lista de desconectados
+        for user in connection.showList("status", "Desconectado"):
+            username = user['username']
+            firstName = user['firstName']
+            lastName = user['lastName']
+            lastConnection = user['lastConnection']
+            disconnected.append(
+                f"{firstName} {lastName} ({username}) Desconectado: {lastConnection}")
+
+        return f'Están conectados: {connected}. \
+            Están desconectados: {disconnected}'

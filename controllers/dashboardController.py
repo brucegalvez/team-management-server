@@ -2,18 +2,14 @@
 # -*- coding: utf-8 -*-
 
 # Módulos propios
-from server import *
-from logger import *
-
-# Librerias importadas
-from flask_restx import Resource
+from . import *
 
 
 class UsersDashboard(Resource):
 
     # Ruta para la API para listar a los usuarios
     def get(self):
-        return 'Estos son todos los usuarios', 200
+        return 'Estos son los estudiantes de tu especialidad.'
 
 
 class UserInfo(Resource):
