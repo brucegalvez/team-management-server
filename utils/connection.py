@@ -16,10 +16,11 @@ class Connection():
     # Metodo para obtener elementos de una
     # coleccion condicionando a llave y valor
     def showList(self, key, value):
-        return self.database.users.find()
+        return self.database.users.find({key: value})
 
     # Metodo para actualizar un (1) registro.
     # Este recibe el usuario a actualizar como user
     # y el valor a cambiar como newValue
+
     def updateItem(self, user, newValue):
         return self.database.users.update_one(user, newValue)

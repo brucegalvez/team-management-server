@@ -113,11 +113,14 @@ class UserStatus(Resource):
 
 class ChatDisplay(Resource):
     # Ruta para la API para listar a los usuarios conectados y desconectados
+
+    @jwt_required
     def get(self):
         connected = []
         disconnected = []
+
+        # Obtenemos la lista de conectados
         for user in connection.showList("status", "Conectado"):
-            # connected.append(user['username'])
             username = user['username']
             firstName = user['firstName']
             lastName = user['lastName']
@@ -125,8 +128,8 @@ class ChatDisplay(Resource):
             connected.append(
                 f"{firstName} {lastName} ({username}) Conectado: {lastConnection}")
 
+        # Obtenemos la lista de desconectados
         for user in connection.showList("status", "Desconectado"):
-            # connected.append(user['username'])
             username = user['username']
             firstName = user['firstName']
             lastName = user['lastName']
