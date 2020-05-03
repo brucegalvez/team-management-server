@@ -18,7 +18,7 @@ class UserProfileData(Resource):
         data = request.get_json()
 
         # Convertimos a string el contenido recibido
-        updatedFields = dicttostr.dictToStr(data)
+        updatedFields = dictChange.dictToList(data)
 
         # Capturamos cada key
         new_profile = data.get("profile", "")
