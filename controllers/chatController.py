@@ -109,3 +109,30 @@ class UserStatus(Resource):
                             'Última conexión': 'Ahora',
                             "success": "true"
                         }, 200
+
+
+class ChatDisplay(Resource):
+    # Ruta para la API para listar a los usuarios conectados y desconectados
+    def get(self):
+        connected = []
+        disconnected = []
+        for user in connection.showList("status", "Conectado"):
+            # connected.append(user['username'])
+            username = user['username']
+            firstName = user['firstName']
+            lastName = user['lastName']
+            lastConnection = user['lastConnection']
+            connected.append(
+                f"{firstName} {lastName} ({username}) Conectado: {lastConnection}")
+
+        for user in connection.showList("status", "Desconectado"):
+            # connected.append(user['username'])
+            username = user['username']
+            firstName = user['firstName']
+            lastName = user['lastName']
+            lastConnection = user['lastConnection']
+            disconnected.append(
+                f"{firstName} {lastName} ({username}) Desconectado: {lastConnection}")
+
+        return f'Están conectados: {connected}. \
+            Están desconectados: {disconnected}'

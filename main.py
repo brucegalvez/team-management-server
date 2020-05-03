@@ -8,7 +8,7 @@ from logger import *
 from controllers.homeController import UserCreator, LoginController
 from controllers.dashboardController import UsersDashboard, UserInfo
 from controllers.profileController import UserProfileData
-from controllers.chatController import UserStatus
+from controllers.chatController import UserStatus, ChatDisplay
 
 
 # Las siguientes funcionalidades
@@ -23,7 +23,8 @@ profile.add_resource(UserProfileData, '/<username>/profile')
 
 # La siguiente api, recibe peticiones dentro del chat
 chatroom = api.namespace('chat', description='Chat API')
-chatroom.add_resource(UserStatus, '/<username>/status')
+chatroom.add_resource(UserStatus, '/<username>')
+chatroom.add_resource(ChatDisplay, '')
 
 # Las siguientes funcionan se accionan desde un dashboard
 dashboard = api.namespace('dashboard', description='Dashboard API')
