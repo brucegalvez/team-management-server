@@ -26,11 +26,18 @@ class UserProfileData(Resource):
         new_phone = data.get("phone", "")
         new_email = data.get("email", "")
         new_campus = data.get("campus", "")
+        new_program = data.get("program", "")
         new_profilePic = data.get("profile picture", "")
 
         # Validamos contenido con opciones válidas
         validFields = ["profile", "program", "phone",
                        "email", "campus", "profile picture", "tags"]
+
+        validCampus = ['Lima Centro', 'Wilson', 'San Juan de Miraflores',
+                       'San Juan de Lurigancho', 'Tomás Valle', 'Ate']
+
+        validPrograms = ['BackEnd', 'FrontEnd',
+                         'Desarrollo de Apps Móviles', 'Diseño de Experiencia del Usuario']
 
         # Validamos que identidad coincida con usuario
         # a modificar data.
@@ -65,6 +72,24 @@ class UserProfileData(Resource):
                             return {
                                 'message': 'Ingrese un correo válido',
                                 'success': 'false'}, 400
+                        else:
+                            pass
+
+                    # Validamos si la nueva sede existe
+                    if new_campus in data.values():
+                        if not new_campus in validCampus:
+                            return {
+                                'message': 'No es una sede existente',
+                                'success': 'false'}, 400
+                        else:
+                            pass
+                    # Validamos si el nuevo prograama existe
+                    if new_program in data.values():
+                        if not new_program in validPrograms:
+                            return {
+                                'message': 'No es un programa válido',
+                                'success': 'false'
+                            }, 400
                         else:
                             pass
                 except:
