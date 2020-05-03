@@ -2,18 +2,36 @@
 # -*- coding: utf-8 -*-
 
 # Módulos propios
-from server import *
-from logger import *
-
-# Librerias importadas
-from flask_restx import Resource
+from . import *
 
 
 class UsersDashboard(Resource):
 
     # Ruta para la API para listar a los usuarios
     def get(self):
-        return 'Estos son todos los usuarios', 200
+        connected = []
+        disconnected = []
+        for user in connection.showList("status", "Conectado"):
+            # connected.append(user['username'])
+            username = user['username']
+            firstName = user['firstName']
+            lastName = user['lastName']
+            lastConnection = user['lastConnection']
+            connected.append(
+
+                f"{firstName} {lastName} ({username}) Conectado: {lastConnection}")
+
+        for user in connection.showList("status", "Desconectado"):
+            # connected.append(user['username'])
+            username = user['username']
+            firstName = user['firstName']
+            lastName = user['lastName']
+            lastConnection = user['lastConnection']
+            disconnected.append(
+                f"{firstName} {lastName} ({username}) Desconectado: {lastConnection}")
+
+        return f'Están conectados: {connected}. \
+            Están desconectados: {disconnected}'
 
 
 class UserInfo(Resource):

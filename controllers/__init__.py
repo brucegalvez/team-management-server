@@ -7,7 +7,7 @@ from logger import *
 from utils.lastConnection import *
 from utils.connection import Connection
 from utils.environment import Environment
-from utils.dictToString import DictToString
+from utils.dictChange import DictChange
 from utils.validate import Validate
 
 
@@ -20,6 +20,6 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 
 connection = Connection()
 config = Environment().settingsOptions()
-dicttostr = DictToString()
+dictChange = DictChange()
 validate = Validate()
 getTime = GetTime()
