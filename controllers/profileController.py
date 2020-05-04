@@ -29,16 +29,6 @@ class UserProfileData(Resource):
         new_program = data.get("program", "")
         new_profilePic = data.get("profile picture", "")
 
-        # Validamos contenido con opciones válidas
-        validFields = ["profile", "program", "phone",
-                       "email", "campus", "profile picture", "tags"]
-
-        validCampus = ['Lima Centro', 'Wilson', 'San Juan de Miraflores',
-                       'San Juan de Lurigancho', 'Tomás Valle', 'Ate']
-
-        validPrograms = ['BackEnd', 'FrontEnd',
-                         'Desarrollo de Apps Móviles', 'Diseño de Experiencia del Usuario']
-
         # Validamos que quiera cambiar datos permitidos
         if not any(fields in validFields for fields in data):
             # Si los datos no son correctos enviará mensaje
@@ -47,6 +37,13 @@ class UserProfileData(Resource):
                 'success': 'false'}, 400
         else:
             try:
+                # Validamos que el perfil no tenga más de 150 caracteres
+                if new_profile in data.values():
+                    if not validate.validateProfile(new_profile):
+                        return {'message': 'Tiene más de 150 caracteres',
+                                'success': 'false'}, 400
+                    else:
+                        pass
                 # Validamos si el telefono es real
                 if new_phone in data.values():
                     if not validate.validateMobile(new_phone):
@@ -82,8 +79,9 @@ class UserProfileData(Resource):
                         }, 400
                     else:
                         pass
+
             except:
-                logging.error('Número y correo inválidos')
+                logging.error('Tiene datos inválidos')
                 return {
                     'message': 'Datos inválidos',
                     'success': 'false'}, 400
@@ -96,5 +94,6 @@ class UserProfileData(Resource):
                 connection.updateItem(current_user, newValue)
 
                 return {
-                    'message': f"Datos actualizados: {updatedFields}",
+                    'message': "Datos actualizados",
+                    'content': data,
                     "success": "true"}, 200

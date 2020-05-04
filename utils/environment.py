@@ -21,10 +21,9 @@ class Environment():
             'DB_DATABASE': os.getenv("DB_DATABASE", 'intranet'),
             'MONGO_URI': os.getenv("MONGO_URI")}
 
-    def settingsOptions(self):
+    def settingsRequest(self):
         return {
-            'STATUS_OPTIONS': list((os.getenv("STATUS_OPTIONS")).split('-')),
-            'USER_DATA_OPTIONS': list((os.getenv("USER_DATA_OPTIONS")).split('-'))}
+            'TOKEN': os.getenv('TOKEN')}
 
     def settingsJWT(self):
         return {

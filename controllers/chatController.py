@@ -13,10 +13,6 @@ class UserStatus(Resource):
         # Obtenemos la identidad de quien hace la peticion
         logged_user = get_jwt_identity()
 
-        # Declaramos la lista de valores posibles
-        status_list = ["Conectado", "Ocupado",
-                       "Ausente", "No Disponible", "Desconectado"]
-
         # Capturamos la peticion
         data = request.get_json()
         # Capturamos el nuevo status
@@ -46,10 +42,11 @@ class UserStatus(Resource):
                     connection.updateItem(
                         current_user, newQuery)
 
-                    return {
-                        'status': new_status,
-                        'Última conexión': f'Última conexión: {lastConnection}',
-                        "success": "true"}, 200
+                    return {'message': 'Obteniendo status y última conexión',
+                            'content': {
+                                'status': new_status,
+                                'lastConnection': lastConnection},
+                            "success": "true"}, 200
 
                 # De Desconectado a Conectado
                 else:
@@ -61,11 +58,11 @@ class UserStatus(Resource):
                     connection.updateItem(
                         current_user, newQuery)
 
-                    return {
-                        'status': new_status,
-                        'Última conexión': 'Ahora',
-                        "success": "true"
-                    }, 200
+                    return {'message': 'Obteniendo status y última conexión',
+                            'content': {'status': new_status,
+                                        'lastConnection': 'Ahora'},
+                            "success": "true"
+                            }, 200
 
             else:
                 # De Otro a Desconectado"
@@ -80,10 +77,10 @@ class UserStatus(Resource):
                     connection.updateItem(
                         current_user, newQuery)
 
-                    return {
-                        'status': new_status,
-                        'Última conexión': f'Última conexión: {lastTime}',
-                        "success": "true"}, 200
+                    return {'message': 'Obteniendo status y última conexión',
+                            'content': {'status': new_status,
+                                        'lastConnection': lastTime},
+                            "success": "true"}, 200
                 # De Conectado a Conectado
                 else:
                     # Creamos query
@@ -95,11 +92,11 @@ class UserStatus(Resource):
                     connection.updateItem(
                         current_user, newQuery)
 
-                    return {
-                        'status': new_status,
-                        'Última conexión': 'Ahora',
-                        "success": "true"
-                    }, 200
+                    return {'message': 'Obteniendo status y última conexión',
+                            'content': {'status': new_status,
+                                        'lastConnection': 'Ahora'},
+                            "success": "true"
+                            }, 200
 
 
 class ChatDisplay(Resource):
@@ -109,6 +106,9 @@ class ChatDisplay(Resource):
     def get(self):
         connected = []
         disconnected = []
+        ocupied = []
+        absent = []
+        unavailable = []
         data = request.get_json()
         user_program = data['program']
 
@@ -118,10 +118,13 @@ class ChatDisplay(Resource):
             firstName = user['firstName']
             lastName = user['lastName']
             lastConnection = user['lastConnection']
+            status = user['status']
             program = user['program']
             if user_program == program:
                 connected.append(
-                    f"{firstName} {lastName} ({username}) Conectado: {lastConnection}")
+                    {'firstName': f'{firstName}', 'lastName': f'{lastName}',
+                     'username': f'{username}', 'status': f'{status}',
+                     'lastConnection': f'{lastConnection}'})
 
         # Obtenemos la lista de desconectados
         for user in connection.showList("status", "Desconectado"):
@@ -132,7 +135,55 @@ class ChatDisplay(Resource):
             program = user['program']
             if user_program == program:
                 disconnected.append(
-                    f"{firstName} {lastName} ({username}) Desconectado: {lastConnection}")
+                    {'firstName': f'{firstName}', 'lastName': f'{lastName}',
+                     'username': f'{username}', 'status': f'{status}',
+                     'lastConnection': f'{lastConnection}'})
 
-        return f'Están conectados: {connected}. \
-            Están desconectados: {disconnected}'
+        # Obtenemos la lista de ocupados
+        for user in connection.showList("status", "Ocupado"):
+            username = user['username']
+            firstName = user['firstName']
+            lastName = user['lastName']
+            lastConnection = user['lastConnection']
+            program = user['program']
+            if user_program == program:
+                disconnected.append(
+                    {'firstName': f'{firstName}', 'lastName': f'{lastName}',
+                     'username': f'{username}', 'status': f'{status}',
+                     'lastConnection': f'{lastConnection}'})
+
+        # Obtenemos la lista de No Disponibles
+        for user in connection.showList("status", "No Disponible"):
+            username = user['username']
+            firstName = user['firstName']
+            lastName = user['lastName']
+            lastConnection = user['lastConnection']
+            program = user['program']
+            if user_program == program:
+                disconnected.append(
+                    {'firstName': f'{firstName}', 'lastName': f'{lastName}',
+                     'username': f'{username}', 'status': f'{status}',
+                     'lastConnection': f'{lastConnection}'})
+
+        # Obtenemos la lista de Ausentes
+        for user in connection.showList("status", "Ausente"):
+            username = user['username']
+            firstName = user['firstName']
+            lastName = user['lastName']
+            lastConnection = user['lastConnection']
+            program = user['program']
+            if user_program == program:
+                disconnected.append(
+                    {'firstName': f'{firstName}', 'lastName': f'{lastName}',
+                     'username': f'{username}', 'status': f'{status}',
+                     'lastConnection': f'{lastConnection}'})
+
+        return {'message': f'Obteniendo listas por status de {user_program}',
+                'content': {'Conectado': connected,
+                            'Desconectado': disconnected,
+                            'Ocupado': ocupied,
+                            'Ausente': absent,
+                            'No Disponible': unavailable
+                            },
+                'success': 'true'
+                }

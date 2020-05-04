@@ -21,6 +21,5 @@ class Connection():
     # Metodo para actualizar un (1) registro.
     # Este recibe el usuario a actualizar como user
     # y el valor a cambiar como newValue
-
     def updateItem(self, user, newValue):
         return self.database.users.update_one(user, newValue)

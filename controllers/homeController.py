@@ -22,7 +22,7 @@ class UserCreator(Resource):
             validate.validatePassword(user['password'])
         ):
             return {
-                'message': 'Error en los campos enviados.',
+                'message': 'Datos inválidos.',
                 'success': 'false'}, 200
         elif list(mongo.db.users.find(
                 {"$or": [{'email': user['email']}, {'username': user['username']}]})):
