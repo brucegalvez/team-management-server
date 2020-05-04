@@ -57,7 +57,9 @@ class LoginController(Resource):
                 'success': 'false'}, 200
         else:
             foundUser = mongo.db.users.find_one({'email': user['email']})
-            if not check_password_hash(foundUser["password"], user['password']):
+            if not (
+                    foundUser and
+                    check_password_hash(foundUser["password"], user['password'])):
                 return {
                     'message': 'Email o contraseña incorrectas',
                     'success': 'false'}, 200
@@ -66,7 +68,9 @@ class LoginController(Resource):
                 access_token = create_access_token(
                     identity=foundUser['username'], expires_delta=expires)
                 return {
+                    'message': 'Login con exito.',
                     'success': 'true',
-                    'username': foundUser['username'],
-                    'token': access_token
-                }, 200
+                    'content': {
+                        'username': foundUser['username'],
+                        'token': access_token
+                    }}, 200
