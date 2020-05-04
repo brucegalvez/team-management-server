@@ -18,7 +18,7 @@ class UserStatus(Resource):
         # Capturamos el nuevo status
         new_status = data["status"]
         # Obtenemos el usuario a modificar
-        current_user = connection.showItem("username", username)
+        current_user = mongo.db.users.find_one({"username": username})
 
         # Validamos que la opcion este dentro de lo permitido
         if not new_status in status_list:
@@ -39,7 +39,7 @@ class UserStatus(Resource):
                         "status": new_status}}
 
                     # Actualizamos lastConnection
-                    connection.updateItem(
+                    mongo.db.users.update_one(
                         current_user, newQuery)
 
                     return {'message': 'Obteniendo status y última conexión',
@@ -55,7 +55,7 @@ class UserStatus(Resource):
                         "status": new_status}}
 
                     # Actualizamos lastConnection
-                    connection.updateItem(
+                    mongo.db.users.update_one(
                         current_user, newQuery)
 
                     return {'message': 'Obteniendo status y última conexión',
@@ -74,7 +74,7 @@ class UserStatus(Resource):
                         "status": new_status}}
 
                     # Actualizamos status y lastConnection
-                    connection.updateItem(
+                    mongo.db.users.update_one(
                         current_user, newQuery)
 
                     return {'message': 'Obteniendo status y última conexión',
@@ -89,7 +89,7 @@ class UserStatus(Resource):
                         "status": new_status}}
 
                     # Actualizamos status y lastConnection
-                    connection.updateItem(
+                    mongo.db.users.update_one(
                         current_user, newQuery)
 
                     return {'message': 'Obteniendo status y última conexión',
@@ -113,7 +113,7 @@ class ChatDisplay(Resource):
         username = data['username']
         user_program = data['program']
 
-        if not list(connection.showList('username', username)):
+        if not list(mongo.db.users.find({'username': username})):
 
             return {'message': 'Usuario no existe',
                     'success': 'false'}, 400
@@ -121,7 +121,7 @@ class ChatDisplay(Resource):
         else:
 
             # Obtenemos la lista de conectados
-            for user in connection.showList("status", "Conectado"):
+            for user in mongo.db.users.find({"status": "Conectado"}):
                 username = user['username']
                 firstName = user['firstName']
                 lastName = user['lastName']
@@ -135,7 +135,7 @@ class ChatDisplay(Resource):
                          'lastConnection': f'{lastConnection}'})
 
             # Obtenemos la lista de desconectados
-            for user in connection.showList("status", "Desconectado"):
+            for user in mongo.db.users.find({"status": "Desconectado"}):
                 username = user['username']
                 firstName = user['firstName']
                 lastName = user['lastName']
@@ -148,7 +148,7 @@ class ChatDisplay(Resource):
                          'lastConnection': f'{lastConnection}'})
 
             # Obtenemos la lista de ocupados
-            for user in connection.showList("status", "Ocupado"):
+            for user in mongo.db.users.find({"status": "Ocupado"}):
                 username = user['username']
                 firstName = user['firstName']
                 lastName = user['lastName']
@@ -161,7 +161,7 @@ class ChatDisplay(Resource):
                          'lastConnection': f'{lastConnection}'})
 
             # Obtenemos la lista de No Disponibles
-            for user in connection.showList("status", "No Disponible"):
+            for user in mongo.db.users.find({"status": "No Disponible"}):
                 username = user['username']
                 firstName = user['firstName']
                 lastName = user['lastName']
@@ -174,7 +174,7 @@ class ChatDisplay(Resource):
                          'lastConnection': f'{lastConnection}'})
 
             # Obtenemos la lista de Ausentes
-            for user in connection.showList("status", "Ausente"):
+            for user in mongo.db.users.find({"status": "Ausente"}):
                 username = user['username']
                 firstName = user['firstName']
                 lastName = user['lastName']

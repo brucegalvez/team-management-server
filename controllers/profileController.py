@@ -89,9 +89,9 @@ class UserProfileData(Resource):
                 # Creamos el query para el nuevo status
                 newValue = {"$set": data}
                 # Obtenemos el usuario a modificar
-                current_user = connection.showItem("username", username)
+                current_user = mongo.db.users.find_one({"username": username})
                 # Actualizamos la data del usuario
-                connection.updateItem(current_user, newValue)
+                mongo.db.users.update_one(current_user, newValue)
 
                 return {
                     'message': "Datos actualizados",

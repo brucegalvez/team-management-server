@@ -5,7 +5,6 @@
 from server import *
 from logger import *
 from utils.lastConnection import *
-from utils.connection import Connection
 from utils.environment import Environment
 from utils.dictChange import DictChange
 from utils.validate import Validate
@@ -18,7 +17,6 @@ from flask_restx import Resource
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
-connection = Connection()
 dictChange = DictChange()
 validate = Validate()
 getTime = GetTime()

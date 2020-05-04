@@ -7,7 +7,7 @@ from .test_home import HomeTest
 class ProfileTest(unittest.TestCase):
     def setUp(self):
         app.config['DEBUG'] = False
-        app.config['MONGO_URI'] = MONGO['MONGO_URI']
+        app.config['MONGO_URI'] = MONGO['MONGO_URI_TEST']
         self.app = app.test_client()
 
     def test_UserProfileData(self):
