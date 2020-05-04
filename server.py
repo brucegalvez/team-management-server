@@ -25,6 +25,7 @@ app.config['MONGO_URI'] = settingsDB['MONGO_URI']
 mongo = PyMongo(app)
 
 bcrypt = Bcrypt(app)
+app.config['PROPAGATE_EXCEPTIONS'] = True
 
 api = Api(
     app,

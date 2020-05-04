@@ -25,7 +25,7 @@ chatroom.add_resource(ChatDisplay, '')
 # Las siguientes funcionan se accionan desde un dashboard
 dashboard = api.namespace('dashboard', description='Dashboard API')
 dashboard.add_resource(UsersDashboard, '/friends')
-dashboard.add_resource(UserInfo, '/friends/<int:id>')
+dashboard.add_resource(UserInfo, '/friends/<username>')
 dashboard.add_resource(UserProfileData, '/<username>/profile')
 
 if __name__ == '__main__':
