@@ -7,13 +7,8 @@ from .test_home import HomeTest
 class ProfileTest(unittest.TestCase):
     def setUp(self):
         app.config['DEBUG'] = False
-        app.config['MONGO_URI'] = 'mongodb://localhost:27017/intranet'
+        app.config['MONGO_URI'] = MONGO['MONGO_URI_TEST']
         self.app = app.test_client()
-        self.app.post(
-            SIGNUP_URL,
-            headers={"Content-Type": "application/json"},
-            data=json.dumps(HomeTest().generateUser(1))
-        )
 
     def test_UserProfileData(self):
 
@@ -27,10 +22,11 @@ class ProfileTest(unittest.TestCase):
             "program": "BackEnd"
         })
 
-        response = self.requests.put(PROFILE_URL,
-                                     headers={
-                                         "Content-Type": "application/json"},
-                                     data=payload)
+        response = requests.put(PROFILE_URL,
+                                headers={
+                                    "Content-Type": "application/json",
+                                    "authorization": 'Bearer ' + str(TOKN['TOKEN'])},
+                                data=payload)
 
         data = response.json()
         self.assertEqual(200, response.status_code)
@@ -40,11 +36,11 @@ class ProfileTest(unittest.TestCase):
         payload = json.dumps({
             "status": "Conectado"
         })
-
         response = requests.put(
             STATUS_URL,
             headers={
-                "Content-Type": "application/json"},
+                "Content-Type": "application/json",
+                "authorization": 'Bearer ' + str(TOKN['TOKEN'])},
             data=payload)
 
         data = response.json()
