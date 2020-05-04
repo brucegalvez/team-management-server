@@ -22,7 +22,7 @@ class UserCreator(Resource):
             validate.validatePassword(user['password'])
         ):
             return {
-                'message': 'Error en los campos enviados.',
+                'message': 'Datos inválidos.',
                 'success': 'false'}, 200
         elif list(mongo.db.users.find(
                 {"$or": [{'email': user['email']}, {'username': user['username']}]})):
@@ -33,7 +33,11 @@ class UserCreator(Resource):
             user['password'] = generate_password_hash(
                 user['password']).decode('utf8')
             user['status'] = 'Conectado'
-            user['lastConnected'] = 'Ahora'
+            user['lastConnection'] = 'Ahora'
+            user['profile'] = 'Hola. Estudio en Pachaqtec'
+            user['program'] = '-'
+            user['campus'] = '-'
+            user['phone'] = '-'
             mongo.db.users.insert_one(user)
             return {
                 'message': 'Cuenta creada con éxito.',

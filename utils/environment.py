@@ -19,12 +19,12 @@ class Environment():
             'DB_HOST': os.getenv("DB_HOST", '127.0.0.1'),
             'DB_PORT': int(os.getenv("DB_PORT", 3306)),
             'DB_DATABASE': os.getenv("DB_DATABASE", 'intranet'),
-            'MONGO_URI': os.getenv("MONGO_URI")}
+            'MONGO_URI': os.getenv("MONGO_URI"),
+            'MONGO_URI_TEST': os.getenv('MONGO_URI_TEST')}
 
-    def settingsOptions(self):
+    def settingsRequest(self):
         return {
-            'STATUS_OPTIONS': list((os.getenv("STATUS_OPTIONS")).split('-')),
-            'USER_DATA_OPTIONS': list((os.getenv("USER_DATA_OPTIONS")).split('-'))}
+            'TOKEN': os.getenv('TOKEN')}
 
     def settingsJWT(self):
         return {
