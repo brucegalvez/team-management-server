@@ -110,80 +110,88 @@ class ChatDisplay(Resource):
         absent = []
         unavailable = []
         data = request.get_json()
+        username = data['username']
         user_program = data['program']
 
-        # Obtenemos la lista de conectados
-        for user in connection.showList("status", "Conectado"):
-            username = user['username']
-            firstName = user['firstName']
-            lastName = user['lastName']
-            lastConnection = user['lastConnection']
-            status = user['status']
-            program = user['program']
-            if user_program == program:
-                connected.append(
-                    {'firstName': f'{firstName}', 'lastName': f'{lastName}',
-                     'username': f'{username}', 'status': f'{status}',
-                     'lastConnection': f'{lastConnection}'})
+        if not list(connection.showList('username', username)):
 
-        # Obtenemos la lista de desconectados
-        for user in connection.showList("status", "Desconectado"):
-            username = user['username']
-            firstName = user['firstName']
-            lastName = user['lastName']
-            lastConnection = user['lastConnection']
-            program = user['program']
-            if user_program == program:
-                disconnected.append(
-                    {'firstName': f'{firstName}', 'lastName': f'{lastName}',
-                     'username': f'{username}', 'status': f'{status}',
-                     'lastConnection': f'{lastConnection}'})
+            return {'message': 'Usuario no existe',
+                    'success': 'false'}, 400
 
-        # Obtenemos la lista de ocupados
-        for user in connection.showList("status", "Ocupado"):
-            username = user['username']
-            firstName = user['firstName']
-            lastName = user['lastName']
-            lastConnection = user['lastConnection']
-            program = user['program']
-            if user_program == program:
-                disconnected.append(
-                    {'firstName': f'{firstName}', 'lastName': f'{lastName}',
-                     'username': f'{username}', 'status': f'{status}',
-                     'lastConnection': f'{lastConnection}'})
+        else:
 
-        # Obtenemos la lista de No Disponibles
-        for user in connection.showList("status", "No Disponible"):
-            username = user['username']
-            firstName = user['firstName']
-            lastName = user['lastName']
-            lastConnection = user['lastConnection']
-            program = user['program']
-            if user_program == program:
-                disconnected.append(
-                    {'firstName': f'{firstName}', 'lastName': f'{lastName}',
-                     'username': f'{username}', 'status': f'{status}',
-                     'lastConnection': f'{lastConnection}'})
+            # Obtenemos la lista de conectados
+            for user in connection.showList("status", "Conectado"):
+                username = user['username']
+                firstName = user['firstName']
+                lastName = user['lastName']
+                lastConnection = user['lastConnection']
+                status = user['status']
+                program = user['program']
+                if user_program == program:
+                    connected.append(
+                        {'firstName': f'{firstName}', 'lastName': f'{lastName}',
+                         'username': f'{username}', 'status': f'{status}',
+                         'lastConnection': f'{lastConnection}'})
 
-        # Obtenemos la lista de Ausentes
-        for user in connection.showList("status", "Ausente"):
-            username = user['username']
-            firstName = user['firstName']
-            lastName = user['lastName']
-            lastConnection = user['lastConnection']
-            program = user['program']
-            if user_program == program:
-                disconnected.append(
-                    {'firstName': f'{firstName}', 'lastName': f'{lastName}',
-                     'username': f'{username}', 'status': f'{status}',
-                     'lastConnection': f'{lastConnection}'})
+            # Obtenemos la lista de desconectados
+            for user in connection.showList("status", "Desconectado"):
+                username = user['username']
+                firstName = user['firstName']
+                lastName = user['lastName']
+                lastConnection = user['lastConnection']
+                program = user['program']
+                if user_program == program:
+                    disconnected.append(
+                        {'firstName': f'{firstName}', 'lastName': f'{lastName}',
+                         'username': f'{username}', 'status': f'{status}',
+                         'lastConnection': f'{lastConnection}'})
 
-        return {'message': f'Obteniendo listas por status de {user_program}',
-                'content': {'Conectado': connected,
-                            'Desconectado': disconnected,
-                            'Ocupado': ocupied,
-                            'Ausente': absent,
-                            'No Disponible': unavailable
-                            },
-                'success': 'true'
-                }
+            # Obtenemos la lista de ocupados
+            for user in connection.showList("status", "Ocupado"):
+                username = user['username']
+                firstName = user['firstName']
+                lastName = user['lastName']
+                lastConnection = user['lastConnection']
+                program = user['program']
+                if user_program == program:
+                    disconnected.append(
+                        {'firstName': f'{firstName}', 'lastName': f'{lastName}',
+                         'username': f'{username}', 'status': f'{status}',
+                         'lastConnection': f'{lastConnection}'})
+
+            # Obtenemos la lista de No Disponibles
+            for user in connection.showList("status", "No Disponible"):
+                username = user['username']
+                firstName = user['firstName']
+                lastName = user['lastName']
+                lastConnection = user['lastConnection']
+                program = user['program']
+                if user_program == program:
+                    disconnected.append(
+                        {'firstName': f'{firstName}', 'lastName': f'{lastName}',
+                         'username': f'{username}', 'status': f'{status}',
+                         'lastConnection': f'{lastConnection}'})
+
+            # Obtenemos la lista de Ausentes
+            for user in connection.showList("status", "Ausente"):
+                username = user['username']
+                firstName = user['firstName']
+                lastName = user['lastName']
+                lastConnection = user['lastConnection']
+                program = user['program']
+                if user_program == program:
+                    disconnected.append(
+                        {'firstName': f'{firstName}', 'lastName': f'{lastName}',
+                         'username': f'{username}', 'status': f'{status}',
+                         'lastConnection': f'{lastConnection}'})
+
+            return {'message': f'Obteniendo listas por status de {user_program}',
+                    'content': {'Conectado': connected,
+                                'Desconectado': disconnected,
+                                'Ocupado': ocupied,
+                                'Ausente': absent,
+                                'No Disponible': unavailable
+                                },
+                    'success': 'true'
+                    }
