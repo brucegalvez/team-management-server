@@ -42,7 +42,7 @@ class HomeTest(unittest.TestCase):
                 idNum=1, filterKeys=self.logInKeys)))
         data = json.loads(response.data)
         self.assertEqual(200, response.status_code)
-        self.assertEqual("true", data['success'])
+        self.assertEqual("false", data['success'])
 
     def test_loginUser_error(self):
         response = self.app.post(
