@@ -12,6 +12,8 @@ pip-selfcheck.json
 
 .env
 
+envi.py
+
 .vscode/*
 
 develop.log
