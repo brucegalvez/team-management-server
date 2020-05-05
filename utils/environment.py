@@ -1,32 +1,25 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-from dotenv import load_dotenv
 from distutils.util import strtobool
-load_dotenv()
+import os
+import utils.envi
 
 
 class Environment():
 
     def settingsGeneral(self):
         return{
-            'PORT': int(os.getenv("PORTAPI", 8081)),
-            'DEBUG': strtobool(os.getenv('DEBUG', "false"))}
+            'PORT': int(os.environ["PORTAPI"]),
+            'DEBUG': strtobool(os.environ['DEBUG'])
+        }
 
     def settingsDB(self):
         return{
-            'DB_HOST': os.getenv("DB_HOST", '127.0.0.1'),
-            'DB_PORT': int(os.getenv("DB_PORT", 3306)),
-            'DB_DATABASE': os.getenv("DB_DATABASE", 'intranet'),
-            'MONGO_URI': os.getenv("MONGO_URI"),
-            'MONGO_URI_TEST': os.getenv('MONGO_URI_TEST')}
-
-    def settingsRequest(self):
-        return {
-            'TOKEN': os.getenv('TOKEN')}
+            'MONGO_URI': os.environ["MONGO_URI"],
+            'MONGO_TEST': os.environ['MONGO_TEST']}
 
     def settingsJWT(self):
         return {
-            'JWT_SECRET_KEY': os.getenv("JWT_SECRET_KEY"),
-            'JWT_ALGORITHM': os.getenv("JWT_ALGORITHM")}
+            'JWT_SECRET_KEY': os.environ["JWT_SECRET_KEY"],
+            'JWT_ALGORITHM': os.environ["JWT_ALGORITHM"]}
