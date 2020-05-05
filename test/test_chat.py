@@ -6,63 +6,81 @@ from . import *
 class ProfileTest(unittest.TestCase):
     def setUp(self):
         app.config['DEBUG'] = False
-        app.config['MONGO_URI'] = MONGO['MONGO_URI_TEST']
+        app.config['MONGO_URI'] = 'mongodb://localhost:27017/intranet'
         self.app = app.test_client()
+        # Creo dos usuarios en la DB y obtengo un token para el primero
+        signUpKeys = ["firstName", "lastName",
+                      "username", "email", "password"]
+        self.app.post(
+            SIGNUP_URL,
+            headers={"Content-Type": "application/json"},
+            data=json.dumps(generateUser(idNum=1, filterKeys=signUpKeys)))
+        self.app.post(
+            SIGNUP_URL,
+            headers={"Content-Type": "application/json"},
+            data=json.dumps(generateUser(idNum=2, filterKeys=signUpKeys)))
+        response = self.app.post(
+            LOGIN_URL,
+            headers={"Content-Type": "application/json"},
+            data=json.dumps(generateUser(
+                idNum=1, filterKeys=["email", "password"])))
+        data = json.loads(response.data)
+        self.token = data['content']['token']
 
     def test_UserStatus_good(self):
         good_payload = json.dumps({'status': 'Conectado'})
 
-        response = requests.put(STATUS_URL,
-                                headers={
-                                    "Content-Type": "application/json",
-                                    "authorization": 'Bearer ' + str(TOKN['TOKEN'])},
-                                data=good_payload)
-
-        data = response.json()
+        response = self.app.put(
+            f"{CHAT_URL}/testUsername1",
+            headers={"Content-Type": "application/json",
+                     "authorization": f"Bearer {self.token}"},
+            data=good_payload)
+        data = json.loads(response.data)
         self.assertEqual(200, response.status_code)
         self.assertEqual("true", data['success'])
 
-    def test_UserStatus_good(self):
+    def test_UserStatus_bad(self):
         bad_payload = json.dumps({'status': 'asdgasdgasdgasd'})
 
-        response = requests.put(STATUS_URL,
+        response = self.app.put(f"{CHAT_URL}/testUsername1",
                                 headers={
                                     "Content-Type": "application/json",
-                                    "authorization": 'Bearer ' + str(TOKN['TOKEN'])},
+                                    "authorization": f'Bearer {self.token}'},
                                 data=bad_payload)
 
-        data = response.json()
+        data = json.loads(response.data)
         self.assertEqual(400, response.status_code)
         self.assertEqual("false", data['success'])
 
     def test_ChatDisplay_good(self):
         good_payload = json.dumps({
-            "username": "javicarden",
-            "program": "FrontEnd"
+            "username": "testUsername1"
         })
 
-        response = requests.get(CHAT_URL,
+        response = self.app.get(CHAT_URL,
                                 headers={
                                     "Content-Type": "application/json",
-                                    "authorization": 'Bearer ' + str(TOKN['TOKEN'])},
+                                    "authorization": f'Bearer {self.token}'},
                                 data=good_payload)
 
-        data = response.json()
+        data = json.loads(response.data)
         self.assertEqual(200, response.status_code)
         self.assertEqual("true", data['success'])
 
     def test_ChatDisplay_bad(self):
         bad_payload = json.dumps({
-            "username": "asdgasdgasdg",
-            "program": "FrontEnd"
+            "username": "asdgasdgasdg"
         })
 
-        response = requests.get(CHAT_URL,
+        response = self.app.get(CHAT_URL,
                                 headers={
                                     "Content-Type": "application/json",
-                                    "authorization": 'Bearer ' + str(TOKN['TOKEN'])},
+                                    "authorization": f'Bearer {self.token}'},
                                 data=bad_payload)
 
-        data = response.json()
+        data = json.loads(response.data)
         self.assertEqual(400, response.status_code)
         self.assertEqual("false", data['success'])
+
+    def tearDown(self):
+        return super().tearDown()
