@@ -8,7 +8,7 @@ class HomeTest(unittest.TestCase):
         app.config['DEBUG'] = False
         app.config['MONGO_URI'] = 'mongodb://localhost:27017/intranet'
         self.app = app.test_client()
-        self.signUpKeys = ["firstName", "lastName",
+        self.signUpKeys = ["firstName", "lastName", "phone",
                            "username", "email", "password"]
         self.logInKeys = ["email", "password"]
         self.app.post(

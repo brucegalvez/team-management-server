@@ -8,7 +8,7 @@ class UserCreator(Resource):
     # Ruta para crear un nuevo usuario
     def post(self):
         user = request.get_json()
-        requiredFields = ['firstName', 'lastName',
+        requiredFields = ['firstName', 'lastName', 'phone',
                           'username', 'email', 'password']
         if list(user.keys()) != requiredFields:
             return {
