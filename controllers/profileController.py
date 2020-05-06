@@ -112,7 +112,7 @@ class UserTags(Resource):
 
         data = request.get_json()
 
-        newTags = data['tags']
+        newTags = data.get('tags')
 
         current_user = mongo.db.users.find_one({'username': username})
 
