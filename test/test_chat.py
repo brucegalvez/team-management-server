@@ -8,7 +8,7 @@ class ProfileTest(unittest.TestCase):
         app.config['DEBUG'] = False
         app.config['MONGO_URI'] = 'mongodb://localhost:27017/intranet'
         self.app = app.test_client()
-        # Creo dos usuarios en la DB y obtengo un token para el primero
+        # Creamos un usuarios en la DB y obtenemos su token
         signUpKeys = ["firstName", "lastName",
                       "username", "email", "password"]
         self.app.post(
