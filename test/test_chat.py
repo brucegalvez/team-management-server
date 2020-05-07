@@ -8,24 +8,28 @@ class ProfileTest(unittest.TestCase):
         app.config['DEBUG'] = False
         app.config['MONGO_URI'] = 'mongodb://localhost:27017/intranet'
         self.app = app.test_client()
-        # Creo dos usuarios en la DB y obtengo un token para el primero
-        signUpKeys = ["firstName", "lastName", "phone",
+        # Creamos un usuarios en la DB y obtenemos su token
+        signUpKeys = ["firstName", "lastName",
                       "username", "email", "password"]
         self.app.post(
             SIGNUP_URL,
             headers={"Content-Type": "application/json"},
             data=json.dumps(generateUser(idNum=1, filterKeys=signUpKeys)))
-        self.app.post(
-            SIGNUP_URL,
-            headers={"Content-Type": "application/json"},
-            data=json.dumps(generateUser(idNum=2, filterKeys=signUpKeys)))
+
         response = self.app.post(
             LOGIN_URL,
             headers={"Content-Type": "application/json"},
             data=json.dumps(generateUser(
                 idNum=1, filterKeys=["email", "password"])))
+
         data = json.loads(response.data)
         self.token = data['content']['token']
+
+        self.app.put(
+            f"{PROFILE_URL}/testUsername1/profile",
+            headers={"Content-Type": "application/json",
+                     "authorization": f"Bearer {self.token}"},
+            data=json.dumps({'program': 'BackEnd'}))
 
     def test_UserStatus_good(self):
         good_payload = json.dumps({'status': 'Conectado'})
@@ -67,7 +71,7 @@ class ProfileTest(unittest.TestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual("true", data['success'])
 
-    def test_ChatDisplay_bad(self):
+    def test_ChatDisplay_bad_username(self):
         bad_payload = json.dumps({
             "username": "asdgasdgasdg"
         })

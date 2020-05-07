@@ -17,9 +17,6 @@ class UserProfileData(Resource):
         # Capturamos la peticion
         data = request.get_json()
 
-        # Convertimos a string el contenido recibido
-        updatedFields = dictChange.dictToList(data)
-
         # Capturamos cada key
         new_profile = data.get("profile", "")
         new_program = data.get("program", "")
@@ -105,3 +102,72 @@ class UserProfileData(Resource):
                         'message': "Datos actualizados",
                         'content': data,
                         "success": "true"}, 200
+
+
+class UserTags(Resource):
+
+    @jwt_required
+    def put(self, username):
+        loggedUsername = get_jwt_identity()
+
+        data = request.get_json()
+
+        newTags = data.get('tags')
+
+        current_user = mongo.db.users.find_one({'username': username})
+
+        if not(loggedUsername == current_user.get('username') != None):
+            return {
+                'message': 'No cuenta con los permisos necesarios.',
+                'success': 'false'}, 400
+        else:
+            if len(data.keys()) != 1:
+                return {'message': 'Solo puede ingresar tags',
+                        'success': 'false'}, 400
+            else:
+                updatedTags = []
+
+                if current_user.get('tags') != None:
+                    oldTags = current_user.get('tags')
+
+                    for old_tag in oldTags:
+                        updatedTags.append(old_tag)
+
+                    for new_tag in newTags:
+                        if newTags.count(new_tag) > 1:
+                            return {'message': 'Tiene elementos repetidos',
+                                    'success': 'false'}, 400
+
+                        if new_tag in validTags:
+                            updatedTags.append(new_tag)
+
+                        else:
+                            return {'message': 'Tags no son válidos',
+                                    'success': 'false'}, 400
+
+                    updatedTags = list(dict.fromkeys(updatedTags))
+
+                else:
+                    for new_tag in newTags:
+                        if newTags.count(new_tag) > 1:
+                            return {'message': 'Tiene elementos repetidos',
+                                    'success': 'false'}, 400
+
+                        if new_tag in validTags:
+                            updatedTags.append(new_tag)
+
+                        else:
+                            return {'message': 'Tags no son válidos',
+                                    'success': 'false'}, 400
+
+                # Creamos el query para el nuevo status
+                newValue = {"$set": {'tags': updatedTags}}
+
+                # Obtenemos el usuario a modificar
+                current_user = mongo.db.users.find_one(
+                    {"username": loggedUsername})
+
+                mongo.db.users.update_one(current_user, newValue)
+                return {'message': 'Tags actualizados',
+                        'content': {'tags': updatedTags},
+                        'success': 'true'}, 200

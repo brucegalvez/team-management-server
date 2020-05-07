@@ -7,7 +7,7 @@ import unittest
 import json
 
 # Modulos propios
-from main import app
+from application import app
 from utils.userGenerator import UserGenerator
 generateUser = UserGenerator().generateUser
 
@@ -17,5 +17,4 @@ LOGIN_URL = f"{BASE_URL}/home/login"
 CHAT_URL = f"{BASE_URL}/chat"
 FRIENDS_URL = f"{BASE_URL}/dashboard/friends"
 PROFILE_URL = f"{BASE_URL}/dashboard"
-TOKN = Environment().settingsRequest()
 MONGO = Environment().settingsDB()

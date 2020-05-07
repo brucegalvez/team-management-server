@@ -122,22 +122,23 @@ class ChatDisplay(Resource):
         data = request.get_json()
         username = data['username']
 
-        if not list(mongo.db.users.find({'username': username})):
+        # Obtenemos el usuario a modificar
+        current_user = mongo.db.users.find_one({"username": username})
 
-            return {'message': 'Usuario no existe',
-                    'success': 'false'}, 400
-
+        if not(loggedUsername == current_user.get('username') != None):
+            return {
+                'message': 'No cuenta con los permisos necesarios.',
+                'success': 'false'}, 400
         else:
-            # Obtenemos el usuario a modificar
-            current_user = mongo.db.users.find_one({"username": username})
+            if not list(mongo.db.users.find({'username': username})):
 
-            if not(loggedUsername == current_user.get('username') != None):
-                return {
-                    'message': 'No cuenta con los permisos necesarios.',
-                    'success': 'false'}, 400
+                return {'message': 'Usuario no existe',
+                        'success': 'false'}, 400
+
             else:
                 loggedUser = mongo.db.users.find_one(
                     {'username': loggedUsername})
+
                 user_program = loggedUser.get('program')
                 if not user_program != None:
                     return {
@@ -156,8 +157,8 @@ class ChatDisplay(Resource):
                         if user_program == program:
                             connected.append(
                                 {'firstName': f'{firstName}', 'lastName': f'{lastName}',
-                                 'username': f'{username}', 'status': f'{status}',
-                                 'lastConnection': f'{lastConnection}'})
+                                    'username': f'{username}', 'status': f'{status}',
+                                    'lastConnection': f'{lastConnection}'})
 
                     # Obtenemos la lista de desconectados
                     for user in mongo.db.users.find({"status": "Desconectado"}):
@@ -170,8 +171,8 @@ class ChatDisplay(Resource):
                         if user_program == program:
                             disconnected.append(
                                 {'firstName': f'{firstName}', 'lastName': f'{lastName}',
-                                 'username': f'{username}', 'status': f'{status}',
-                                 'lastConnection': f'{lastConnection}'})
+                                    'username': f'{username}', 'status': f'{status}',
+                                    'lastConnection': f'{lastConnection}'})
 
                     # Obtenemos la lista de ocupados
                     for user in mongo.db.users.find({"status": "Ocupado"}):
@@ -184,8 +185,8 @@ class ChatDisplay(Resource):
                         if user_program == program:
                             disconnected.append(
                                 {'firstName': f'{firstName}', 'lastName': f'{lastName}',
-                                 'username': f'{username}', 'status': f'{status}',
-                                 'lastConnection': f'{lastConnection}'})
+                                    'username': f'{username}', 'status': f'{status}',
+                                    'lastConnection': f'{lastConnection}'})
 
                     # Obtenemos la lista de No Disponibles
                     for user in mongo.db.users.find({"status": "No Disponible"}):
@@ -198,8 +199,8 @@ class ChatDisplay(Resource):
                         if user_program == program:
                             disconnected.append(
                                 {'firstName': f'{firstName}', 'lastName': f'{lastName}',
-                                 'username': f'{username}', 'status': f'{status}',
-                                 'lastConnection': f'{lastConnection}'})
+                                    'username': f'{username}', 'status': f'{status}',
+                                    'lastConnection': f'{lastConnection}'})
 
                     # Obtenemos la lista de Ausentes
                     for user in mongo.db.users.find({"status": "Ausente"}):
@@ -212,8 +213,8 @@ class ChatDisplay(Resource):
                         if user_program == program:
                             disconnected.append(
                                 {'firstName': f'{firstName}', 'lastName': f'{lastName}',
-                                 'username': f'{username}', 'status': f'{status}',
-                                 'lastConnection': f'{lastConnection}'})
+                                    'username': f'{username}', 'status': f'{status}',
+                                    'lastConnection': f'{lastConnection}'})
 
                     return {'message': f'Obteniendo listas por status de {user_program}',
                             'content': {'Conectado': connected,

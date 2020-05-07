@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from . import *
-from .test_home import HomeTest
 
 
 class ProfileTest(unittest.TestCase):
@@ -9,22 +8,20 @@ class ProfileTest(unittest.TestCase):
         app.config['DEBUG'] = False
         app.config['MONGO_URI'] = 'mongodb://localhost:27017/intranet'
         self.app = app.test_client()
-        # Creo dos usuarios en la DB y obtengo un token para el primero
-        signUpKeys = ["firstName", "lastName", "phone",
+
+        # Creamos un usuario en la DB y obtenemos su token
+        signUpKeys = ["firstName", "lastName",
                       "username", "email", "password"]
         self.app.post(
             SIGNUP_URL,
             headers={"Content-Type": "application/json"},
             data=json.dumps(generateUser(idNum=1, filterKeys=signUpKeys)))
-        self.app.post(
-            SIGNUP_URL,
-            headers={"Content-Type": "application/json"},
-            data=json.dumps(generateUser(idNum=2, filterKeys=signUpKeys)))
+
         response = self.app.post(
             LOGIN_URL,
             headers={"Content-Type": "application/json"},
             data=json.dumps(generateUser(
-                idNum=2, filterKeys=["email", "password"])))
+                idNum=1, filterKeys=["email", "password"])))
         data = json.loads(response.data)
         self.token = data['content']['token']
 
@@ -35,12 +32,11 @@ class ProfileTest(unittest.TestCase):
             "program": "FrontEnd",
             "campus": "Lima",
             "phone": "+51991467953",
-            "email": "aho123@mail.com",
             "campus": "Ate",
             "program": "BackEnd"
         })
 
-        response = self.app.put(f'{PROFILE_URL}/testUsername2/profile',
+        response = self.app.put(f'{PROFILE_URL}/testUsername1/profile',
                                 headers={
                                     "Content-Type": "application/json",
                                     "authorization": f"Bearer {self.token}"},
@@ -62,7 +58,7 @@ class ProfileTest(unittest.TestCase):
             "program": "BackEnd"
         })
 
-        response = self.app.put(f'{PROFILE_URL}/testUsername2/profile',
+        response = self.app.put(f'{PROFILE_URL}/testUsername1/profile',
                                 headers={
                                     "Content-Type": "application/json",
                                     "authorization": f"Bearer {self.token}"},
@@ -71,3 +67,71 @@ class ProfileTest(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(400, response.status_code)
         self.assertEqual("false", data['success'])
+
+    def test_UserTags_good(self):
+
+        payload = json.dumps({
+            "tags": ["HTML", "CSS"]
+        })
+
+        response = self.app.put(f'{PROFILE_URL}/testUsername1/profile/tags',
+                                headers={
+                                    "Content-Type": "application/json",
+                                    "authorization": f"Bearer {self.token}"},
+                                data=payload)
+
+        data = json.loads(response.data)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("true", data['success'])
+
+    def test_UserTags_bad_repeated(self):
+
+        payload = json.dumps({
+            "tags": ["HTML", "CSS", "CSS"]
+        })
+
+        response = self.app.put(f'{PROFILE_URL}/testUsername1/profile/tags',
+                                headers={
+                                    "Content-Type": "application/json",
+                                    "authorization": f"Bearer {self.token}"},
+                                data=payload)
+
+        data = json.loads(response.data)
+        self.assertEqual(400, response.status_code)
+        self.assertEqual("false", data['success'])
+
+    def test_UserTags_bad_non_existent(self):
+
+        payload = json.dumps({
+            "tags": ["HT!ML", "CSSSSS"]
+        })
+
+        response = self.app.put(f'{PROFILE_URL}/testUsername1/profile/tags',
+                                headers={
+                                    "Content-Type": "application/json",
+                                    "authorization": f"Bearer {self.token}"},
+                                data=payload)
+
+        data = json.loads(response.data)
+        self.assertEqual(400, response.status_code)
+        self.assertEqual("false", data['success'])
+
+    def test_UserTags_bad_more_keys(self):
+
+        payload = json.dumps({
+            "tags": ["HT!ML", "CSSSSS"],
+            "Hello": "Want to broke this"
+        })
+
+        response = self.app.put(f'{PROFILE_URL}/testUsername1/profile/tags',
+                                headers={
+                                    "Content-Type": "application/json",
+                                    "authorization": f"Bearer {self.token}"},
+                                data=payload)
+
+        data = json.loads(response.data)
+        self.assertEqual(400, response.status_code)
+        self.assertEqual("false", data['success'])
+
+    def tearDown(self):
+        return super().tearDown()
