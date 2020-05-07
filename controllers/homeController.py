@@ -8,8 +8,8 @@ class UserCreator(Resource):
     # Ruta para crear un nuevo usuario
     def post(self):
         user = request.get_json()
-        requiredFields = ['firstName', 'lastName', 'phone',
-                          'username', 'email', 'password']
+        requiredFields = ['firstName', 'lastName', 'phone', 'campus',
+                          'birthday', 'username', 'email', 'password']
         if list(user.keys()) != requiredFields:
             return {
                 'message': 'Error en los campos enviados.',
@@ -19,7 +19,10 @@ class UserCreator(Resource):
             validate.validateGivenName(user['lastName']) and
             validate.validateUsername(user['username']) and
             validate.validateEmail(user['email']) and
-            validate.validatePassword(user['password'])
+            validate.validatePassword(user['password']) and
+            validate.validateCampus(user['campus']) and
+            validate.validateMobile(user['phone']) and
+            validate.validateBirthday(user['birthday'])
         ):
             return {
                 'message': 'Datos inválidos.',
