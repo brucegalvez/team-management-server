@@ -44,5 +44,113 @@ class DashboardTest(unittest.TestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual("false", data['success'])
 
+    def test_UsersDashboard_success_no_content(self):
+        response = self.app.get(
+            f"{FRIENDS_URL}",
+            headers={"Content-Type": "application/json",
+                     "Authorization": f"Bearer {self.token}"})
+        data = json.loads(response.data)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("true", data['success'])
+
+    def test_UsersDashboard_success_text_content(self):
+        payload = {"text": "test"}
+        response = self.app.get(
+            f"{FRIENDS_URL}",
+            headers={"Content-Type": "application/json",
+                     "Authorization": f"Bearer {self.token}"},
+            data=payload)
+        data = json.loads(response.data)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("true", data['success'])
+
+    def test_UsersDashboard_success_program_content(self):
+        payload = {"program": "BackEnd"}
+        response = self.app.get(
+            f"{FRIENDS_URL}",
+            headers={"Content-Type": "application/json",
+                     "Authorization": f"Bearer {self.token}"},
+            data=payload)
+        data = json.loads(response.data)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("true", data['success'])
+
+    def test_UsersDashboard_success_text_program_content(self):
+        payload = {"program": "BackEnd", "text": "test"}
+        response = self.app.get(
+            f"{FRIENDS_URL}",
+            headers={"Content-Type": "application/json",
+                     "Authorization": f"Bearer {self.token}"},
+            data=payload)
+        data = json.loads(response.data)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("true", data['success'])
+
+    def test_UsersDashboard_success_text_program_order_content(self):
+        payload = {"program": "BackEnd", "text": "test", "order": "A-Z"}
+        response = self.app.get(
+            f"{FRIENDS_URL}",
+            headers={"Content-Type": "application/json",
+                     "Authorization": f"Bearer {self.token}"},
+            data=payload)
+        data = json.loads(response.data)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("true", data['success'])
+
+    def test_UsersDashboard_success_order_content_A(self):
+        payload = {"order": "A-Z"}
+        response = self.app.get(
+            f"{FRIENDS_URL}",
+            headers={"Content-Type": "application/json",
+                     "Authorization": f"Bearer {self.token}"},
+            data=payload)
+        data = json.loads(response.data)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("true", data['success'])
+
+    def test_UsersDashboard_success_order_content_Z(self):
+        payload = {"order": "Z-A"}
+        response = self.app.get(
+            f"{FRIENDS_URL}",
+            headers={"Content-Type": "application/json",
+                     "Authorization": f"Bearer {self.token}"},
+            data=payload)
+        data = json.loads(response.data)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("true", data['success'])
+
+    def test_UsersDashboard_error_text_program_order_content(self):
+        payload = {"program": "BackEnd", "text": "test", "order": "!"}
+        response = self.app.get(
+            f"{FRIENDS_URL}",
+            headers={"Content-Type": "application/json",
+                     "Authorization": f"Bearer {self.token}"},
+            data=payload)
+        data = json.loads(response.data)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("true", data['success'])
+
+    def test_UsersDashboard_error_program_content(self):
+        payload = {"program": "Waja"}
+        response = self.app.get(
+            f"{FRIENDS_URL}",
+            headers={"Content-Type": "application/json",
+                     "Authorization": f"Bearer {self.token}"},
+            data=payload)
+        data = json.loads(response.data)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("true", data['success'])
+
+    def test_UsersDashboard_error_order_content(self):
+        payload = {"order": "1"}
+        response = self.app.get(
+            f"{FRIENDS_URL}",
+            headers={"Content-Type": "application/json",
+                     "Authorization": f"Bearer {self.token}"},
+            data=payload)
+        data = json.loads(response.data)
+        self.assertEqual(400, response.status_code)
+        self.assertEqual("false", data['success'])
+
     def tearDown(self):
         return super().tearDown()
