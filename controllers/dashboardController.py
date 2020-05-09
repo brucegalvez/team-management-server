@@ -12,7 +12,11 @@ class UserInfo(Resource):
         loggedUsername = get_jwt_identity()
         loggedUser = mongo.db.users.find_one({'username': loggedUsername})
         requiredUser = mongo.db.users.find_one({'username': username})
-        if not(loggedUser.get('campus') == requiredUser.get('campus') != None):
+        if requiredUser == None or loggedUser == None:
+            return {
+                'message': 'No cuenta con los permisos necesarios.',
+                'success': 'false'}, 200
+        elif not(loggedUser.get('campus') == requiredUser.get('campus')):
             return {
                 'message': 'No cuenta con los permisos necesarios.',
                 'success': 'false'}, 200
