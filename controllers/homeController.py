@@ -8,9 +8,9 @@ class UserCreator(Resource):
     # Ruta para crear un nuevo usuario
     def post(self):
         user = request.get_json()
-        requiredFields = ['firstName', 'lastName', 'phone', 'campus',
-                          'birthday', 'username', 'email', 'password']
-        if list(user.keys()) != requiredFields:
+        requiredFields = ['birthday', 'campus', 'email', 'firstName',
+                          'lastName', 'password', 'phone', 'username']
+        if sorted(list(user.keys())) != requiredFields:
             return {
                 'message': 'Error en los campos enviados.',
                 'success': 'false'}, 200
@@ -21,8 +21,7 @@ class UserCreator(Resource):
             validate.validateEmail(user['email']) and
             validate.validatePassword(user['password']) and
             validate.validateCampus(user['campus']) and
-            validate.validateMobile(user['phone']) and
-            validate.validateBirthday(user['birthday'])
+            validate.validateMobile(user['phone'])
         ):
             return {
                 'message': 'Datos inválidos.',
