@@ -32,7 +32,7 @@ class ProfileTest(unittest.TestCase):
             "program": "FrontEnd",
             "campus": "Lima",
             "phone": "+51991467953",
-            "campus": "Ate",
+            "campus": "Ate - Lima Este",
             "program": "BackEnd"
         })
 
