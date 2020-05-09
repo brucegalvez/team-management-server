@@ -1,4 +1,5 @@
 from random import randint
+import datetime
 
 
 class UserGenerator():
@@ -11,8 +12,9 @@ class UserGenerator():
             "password": "testPassword",
             "profile": "testProfile",
             "program": "FrontEnd",
-            "campus": "Lima",
-            "phone": "+51999999999"
+            "campus": "Lima Centro",
+            "phone": "+51999999999",
+            "birthday": "2018-06-12"
         }
         if filterKeys:
             return {k: v for k, v in userTemplate.items() if k in filterKeys}
