@@ -15,10 +15,7 @@ class DashboardTest(unittest.TestCase):
             SIGNUP_URL,
             headers={"Content-Type": "application/json"},
             data=json.dumps(generateUser(idNum=1, filterKeys=signUpKeys)))
-        self.app.post(
-            SIGNUP_URL,
-            headers={"Content-Type": "application/json"},
-            data=json.dumps(generateUser(idNum=2, filterKeys=signUpKeys)))
+
         response = self.app.post(
             LOGIN_URL,
             headers={"Content-Type": "application/json"},
@@ -75,7 +72,7 @@ class DashboardTest(unittest.TestCase):
         self.assertEqual("true", data['success'])
 
     def test_UsersDashboard_success_text_program_content(self):
-        payload = {"program": "BackEnd", "text": "test"}
+        payload = {"program": "BackEnd", "text": "a"}
         response = self.app.get(
             f"{FRIENDS_URL}",
             headers={"Content-Type": "application/json",
@@ -86,7 +83,7 @@ class DashboardTest(unittest.TestCase):
         self.assertEqual("true", data['success'])
 
     def test_UsersDashboard_success_text_program_order_content(self):
-        payload = {"program": "BackEnd", "text": "test", "order": "A-Z"}
+        payload = {"program": "BackEnd", "text": "a", "order": "A-Z"}
         response = self.app.get(
             f"{FRIENDS_URL}",
             headers={"Content-Type": "application/json",
@@ -119,7 +116,7 @@ class DashboardTest(unittest.TestCase):
         self.assertEqual("true", data['success'])
 
     def test_UsersDashboard_error_text_program_order_content(self):
-        payload = {"program": "BackEnd", "text": "test", "order": "!"}
+        payload = {"program": "BackEnd", "text": "a", "order": "!"}
         response = self.app.get(
             f"{FRIENDS_URL}",
             headers={"Content-Type": "application/json",
