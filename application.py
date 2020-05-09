@@ -32,4 +32,4 @@ chatroom.add_resource(ChatDisplay, '')
 
 if __name__ == '__main__':
     config = Environment().settingsGeneral()
-    app.run(port=config['PORT'], debug=config['DEBUG'])
+    app.run(host=config['HOST'], port=config['PORT'], debug=config['DEBUG'])
