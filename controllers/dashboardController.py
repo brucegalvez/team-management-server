@@ -72,7 +72,7 @@ class UsersDashboard(Resource):
                 try:
                     # Si el usuario pide mediante texto o programa de
                     # especializaciòn, mostramos las coincidencias
-                    if "program" in data.keys() and "text" in data.keys():
+                    if ("program" in data.keys() and "text" in data.keys()):
                         namesList = text.split()
                         for name in namesList:
                             for user in mongo.db.users.find(
@@ -121,8 +121,8 @@ class UsersDashboard(Resource):
                     # Si hay orden en la petición, pero no otros valores,
                     # armamos la lista con todos los valores.
                     if ("order" in data.keys() and
-                        "program" not in data.keys() and
-                            "text" not in data.keys()):
+                        ("program" not in data.keys() and
+                            "text" not in data.keys())):
                         for user in mongo.db.users.find():
 
                             del user['password']
