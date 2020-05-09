@@ -9,8 +9,8 @@ class DashboardTest(unittest.TestCase):
         app.config['MONGO_URI'] = 'mongodb://localhost:27017/intranet'
         self.app = app.test_client()
         # Creo dos usuarios en la DB y obtengo un token para el primero
-        signUpKeys = ["firstName", "lastName", "phone",
-                      "username", "email", "password"]
+        signUpKeys = ['birthday', 'campus', 'email', 'firstName',
+                      'lastName', 'password', 'phone', 'username']
         self.app.post(
             SIGNUP_URL,
             headers={"Content-Type": "application/json"},

@@ -10,8 +10,8 @@ class ProfileTest(unittest.TestCase):
         self.app = app.test_client()
 
         # Creamos un usuario en la DB y obtenemos su token
-        signUpKeys = ["firstName", "lastName",
-                      "username", "email", "password"]
+        signUpKeys = ['birthday', 'campus', 'email', 'firstName',
+                      'lastName', 'password', 'phone', 'username']
         self.app.post(
             SIGNUP_URL,
             headers={"Content-Type": "application/json"},
