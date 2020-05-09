@@ -11,7 +11,8 @@ class Environment():
     def settingsGeneral(self):
         return{
             'PORT': int(os.environ["PORTAPI"]),
-            'DEBUG': strtobool(os.environ['DEBUG'])
+            'DEBUG': strtobool(os.environ['DEBUG']),
+            'HOST': os.environ['HOST'],
         }
 
     def settingsDB(self):
