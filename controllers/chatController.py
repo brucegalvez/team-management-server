@@ -112,7 +112,7 @@ class ChatDisplay(Resource):
 
         # Obtenemos la identidad de quien hace la peticion
         loggedUsername = get_jwt_identity()
-
+        loggedUser = mongo.db.users.find_one({'username': loggedUsername})
         # Creamos las listas de usuarios por cada status
         connected = []
         disconnected = []
@@ -120,15 +120,20 @@ class ChatDisplay(Resource):
         absent = []
         unavailable = []
         data = request.get_json()
-        username = data['username']
+        username = data.get('username')
 
         # Obtenemos el usuario a modificar
-        current_user = mongo.db.users.find_one({"username": username})
-
-        if not(loggedUsername == current_user.get('username') != None):
+        current_user = mongo.db.users.find_one({'username': username})
+        if current_user == None or loggedUser == None:
             return {
                 'message': 'No cuenta con los permisos necesarios.',
                 'success': 'false'}, 400
+
+        elif not(loggedUser.get('campus') == current_user.get('campus')):
+            return {
+                'message': 'No cuenta con los permisos necesarios.',
+                'success': 'false'}, 400
+
         else:
             if not list(mongo.db.users.find({'username': username})):
 
@@ -136,9 +141,6 @@ class ChatDisplay(Resource):
                         'success': 'false'}, 400
 
             else:
-                loggedUser = mongo.db.users.find_one(
-                    {'username': loggedUsername})
-
                 user_program = loggedUser.get('program')
                 if not user_program != None:
                     return {

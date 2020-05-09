@@ -15,7 +15,7 @@ class UserGenerator():
             "program": "FrontEnd",
             "campus": "Lima Centro",
             "phone": "+51999999999",
-            "birthday": f'{x}'
+            "birthday": "2018-06-12"
         }
         if filterKeys:
             return {k: v for k, v in userTemplate.items() if k in filterKeys}
