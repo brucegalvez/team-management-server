@@ -31,7 +31,7 @@ validFields = ["profile", "program", "phone",
 
 # Declaramos lista de campus válidos
 validCampus = ['Lima Centro', 'Wilson', 'San Juan de Miraflores',
-               'San Juan de Lurigancho', 'Tomás Valle', 'Ate']
+               'San Juan de Lurigancho', 'Tomás Valle - Lima Norte', 'Ate - Lima Este']
 
 # Declaramos lista de especialidades válidas
 validPrograms = ['BackEnd', 'FrontEnd',
