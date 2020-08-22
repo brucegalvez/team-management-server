@@ -1,7 +1,7 @@
-# Backend-Team-Management-App
-REST API made in Python for managing the teams of students of Pachaqtec Coding School, made as part of the final project for the specialization program in Backend 2019-2020 of the same school.
+# RESTfull service for a Team Management App
+RESTfull service built with Python and Flask for managing student teams of Pachaqtec Coding School. Made as part of the final project for the specialization program in Backend 2019-2020 of the same school.
 
-## Resources
+## Service Endpoints
 
 ### Home - Sign up and login
 ```http
@@ -25,7 +25,7 @@ PUT /chat/{username}
 
 ## Standards & full documentation
 - Follows PEP8.
-- Refer to postman file for full documentation
+- Refer to postman file for the full documentation
 
 ## Responses
 Returns a JSON response in the following format:
@@ -50,5 +50,5 @@ Returns the following status codes in its API:
 | 500 | `INTERNAL SERVER ERROR` |
 
 ## Credits:
-- Rodrigo Bruce Galvez (leader)
+- Rodrigo Bruce Galvez (team leader)
 - Javier Cárdenas
