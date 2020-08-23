@@ -1,5 +1,5 @@
 # RESTfull service for a Team Management App
-RESTfull service built with Python and Flask for managing student teams of Pachaqtec Coding School. Made as part of the final project for the specialization program in Backend 2019-2020 of the same school.
+RESTfull service built with Python, Flask, and Mongoose for managing student teams of Pachaqtec Coding School. Built as part of the final project of the backend specialization program from the same school.
 
 ## Service Endpoints
 
